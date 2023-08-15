@@ -1,0 +1,17 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html {
+  --primary:"#020202";
+  --primary-content: "#F2F2F2";
+  --secondary:"#F2F2F2";
+  --secondary-content: "#020202";
+  --accent:"#CB180B";
+  --accent-content: "#020202";
+}
+
+
+body {
+  color: var(--primary);
+}

@@ -1,0 +1,115 @@
+$title1_fs: 119.21px;
+$title2_fs: 95.37px;
+$title3_fs: 76.29px;
+
+$h1_fs: 61.04px;
+$h2_fs: 48.83px;
+$h3_fs: 39.06px;
+$h4_fs: 31.25px;
+$h5_fs: 25px;
+$h6_fs: 20px;
+$p_fs: 16px;
+// $c1:#143F6B;
+// $c2: #F55353;
+// $c3: #FEB139;
+.event-page-wrapper {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+
+    .title-wrapper {
+        padding: 3rem 1rem;
+        width: 100%;
+    
+        .title {
+            font-size: $title2_fs;
+            line-height: .95;
+            margin: 0;
+            font-weight: 800;
+            text-transform: capitalize;
+        }
+    
+        .sub-title {
+            font-size: $h2_fs;
+            line-height: 0.9;
+            margin: 0;
+            margin-top: 2rem;
+            text-transform: uppercase;
+            font-weight: 300;
+        }
+    }
+    
+    .scroll-btn-container {
+        padding: 0 3rem;
+    
+        .scroll-btn {
+            width: 10rem;
+            height: 10rem;
+            display: flex;
+            border: 2px solid #222;
+            border-radius: 150px;
+            justify-content: center;
+            align-items: center;
+            font-size: 50px;
+            transition: .2s ease;
+            cursor: pointer;
+    
+            &:hover {
+                transform: rotate(-90deg);
+            }
+    
+        }
+    }
+    
+    .event-body-wrapper {
+    
+        width: 100%;
+    
+        .h1-wrapper {
+            padding: 2rem 1rem;
+            padding-bottom: .5rem;
+            border-top: 2px solid #333;
+    
+            &:not(:first-of-type) {
+                margin-top: 4rem;
+            }
+
+            &:last-of-type {
+                border-bottom: 2px solid #333;
+                margin-bottom: 4rem;
+            }
+    
+            h1 {
+                font-size: $h1_fs;
+                font-weight: 700;
+            }
+    
+        }
+    
+        p {
+            font-size: $p_fs;
+            text-transform: uppercase;
+            padding: 0 3rem;
+            text-align: left;
+            // width: 70%;
+        }
+    
+        .list-wrapper {
+            ul, ol {
+                list-style-type: revert;
+                padding-left: 4.5rem;
+    
+                ol, ul{
+                    padding-left: 2.5rem;
+                }
+    
+                li {
+                    font-size: $p_fs;
+                }
+            }
+        }
+    
+        
+    }
+}
+
