@@ -1,3 +1,5 @@
+"use client";
+
 import { Abril_Fatface } from "next/font/google";
 import { useAuth } from "@/context/AuthContext";
 
