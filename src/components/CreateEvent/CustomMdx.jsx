@@ -1,7 +1,7 @@
 // import { serialize } from 'next-mdx-remote/serialize'
 // import { MDXRemote } from 'next-mdx-remote/rsc'
 import Markdown from 'markdown-to-jsx'
-import { Heading1, OrderedList, Paragraph, UnorderedList, EventDetails } from './EventShards'
+import { Heading1, OrderedList, Paragraph, UnorderedList, EventDetails, Anchor } from './EventShards'
 
 
 const components = {
@@ -17,6 +17,9 @@ const components = {
   ol: {
     component: OrderedList
   },
+  a: {
+    component: Anchor
+  }
 }
 
 export default function CustomMDX({ source }) {

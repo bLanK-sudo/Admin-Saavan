@@ -15,7 +15,7 @@ export default function Home() {
       setUser(cred);
     }
   }, [token]);
-  console.log(status);
+  // console.log(status);
   if (status === "loading") {
     return (
       <>

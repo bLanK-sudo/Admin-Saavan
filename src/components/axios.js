@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const devUrl = 'http://localhost:8000/'
+const devUrl = 'https://saavan23dev.onrender.com/'
 
 const url = process.env.PUBLIC_URL || devUrl
 

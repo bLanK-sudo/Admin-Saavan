@@ -8,6 +8,14 @@ const EventRegisterationCTA = ({...props}) => {
     )
 }
 
+const Anchor = ({children, ...props}) => {
+    return (
+        <a {...props} target="_blank" className='link'>
+            {children}
+        </a>
+    )
+}
+
 const Title = ({title, ...props}) => {
     return (
     <div className="title-wrapper">
@@ -96,4 +104,5 @@ export {
     OrderedList,
     UnorderedList,
     EventRegisterationCTA,
+    Anchor,
 }

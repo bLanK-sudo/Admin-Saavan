@@ -19,6 +19,7 @@ import MDEditor, {
 import rehypeSanitize from "rehype-sanitize";
 import EventPageTemplate from "@/components/CreateEvent/EventPageTemplate.jsx";
 import axios from "@/components/axios";
+import { useAuth } from "@/context/AuthContext";
 
 const InformativeLink = ({ name, value, setName, setValue }) => {
   return (
@@ -169,6 +170,7 @@ const JudgesRow = ({ title, setValue, ...props }) => {
 };
 
 export default function CreateEvent() {
+  const {token} = useAuth()
   const emptyDummyObj = {
     name: "",
     value: "",
@@ -272,12 +274,12 @@ export default function CreateEvent() {
       // ],
     };
     console.log(JSON.stringify(payload));
-    const token = "";
+    const accessToken = token.accessToken
     axios
       .post(
         "events/create-event/",
         { ...payload },
-        { headers: { Authorization: `Bearer ${token}` } }
+        { headers: { Authorization: `Bearer ${accessToken}` } }
       )
       .then((res) => {
         console.log(res);
