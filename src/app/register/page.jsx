@@ -1,8 +1,30 @@
 import { Abril_Fatface } from "next/font/google";
+import { useAuth } from "@/context/AuthContext";
 
 const abril = Abril_Fatface({ subsets: ["latin"], weight: ["400"] });
 
 export default function Register() {
+  const { status } = useAuth();
+
+  if (status === "loading") {
+    return (
+      <>
+        <main className="fixed w-screen h-screen inset-0 bg-black bg-opacity-50 flex justify-center items-center">
+          <div className="w-32 h-32 bg-white rounded-full" />
+        </main>
+      </>
+    );
+  }
+  if (status === "unauthenticated") {
+    return (
+      <>
+        <div className="flex flex-col gap-2 justify-center items-center min-h-[70vh]">
+          <h1 className="text-4xl font-bold">Unauthenticated</h1>
+          <p>You are not logged in</p>
+        </div>
+      </>
+    );
+  }
   return (
     <>
       <main className="w-full flex flex-col gap-2">

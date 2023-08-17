@@ -2,15 +2,49 @@
 
 import { useState } from "react";
 import UserDetails from "./UserDetailsDiv";
-import { motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import UserOptionsModal from "./UserOptionsModal";
+import { useAuth } from "@/context/AuthContext";
 import UserModal from "./UserModal";
 export default function User() {
   const [userDetails, setUserDetails] = useState([]);
   const [modal, setModal] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [success, setSuccess] = useState(false);
   const [userOptionsModal, setUserOptionsModal] = useState(false);
-  const handleSave = () => {
+  const { token } = useAuth();
+  const parsed_token = JSON.parse(token).access_token;
+  const handleSave = async () => {
     console.log(userDetails);
+    setLoading(true);
+    try {
+      console.log("sending fetch");
+      const response = await fetch(
+        "https://saavan23dev.onrender.com/events/set-template/4/",
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + parsed_token,
+          },
+          body: JSON.stringify({
+            template: userDetails,
+          }),
+        }
+      );
+
+      const data = await response.json();
+      if (response.status === 200) {
+        setSuccess(true);
+        setTimeout(() => {
+          setSuccess(false);
+        }, 4500);
+      }
+      setLoading(false);
+      console.log(data);
+    } catch (err) {
+      console.log(err);
+    }
   };
   return (
     <>
@@ -27,13 +61,6 @@ export default function User() {
                 disabled
                 className="outline-none p-4 bg-primary text-primary-content w-full border-b-2 border-secondary"
                 placeholder="Full Name"
-              />
-              <input
-                id="name"
-                type="number"
-                disabled
-                className="outline-none p-4 bg-primary text-primary-content w-full border-b-2 border-secondary"
-                placeholder="Phone"
               />
               <div className="flex w-full items-center">
                 <label
@@ -68,14 +95,14 @@ export default function User() {
             onClick={() => {
               setModal(true);
             }}
-            className="m-1 flex hover:text-accent-content justify-center items-center border-2 border-secondary h-12 nav-btn cursor-pointer">
+            className="m-1 flex hover:bg-green-800 transition-all duration-300 hover:text-accent-content  justify-center items-center border-2 border-secondary h-12 cursor-pointer">
             <h1 className="z-[0] font-bold">Add a field</h1>
           </div>
           <div
             onClick={() => {
               setUserOptionsModal(true);
             }}
-            className="m-1 flex hover:text-accent-content justify-center items-center border-2 border-secondary h-12 nav-btn cursor-pointer">
+            className="m-1 hover:bg-green-800 transition-all duration-300 hover:text-accent-content flex justify-center items-center border-2 border-secondary h-12 cursor-pointer">
             <h1 className="z-[0] font-bold">Add a poll/options</h1>
           </div>
         </div>
@@ -97,11 +124,44 @@ export default function User() {
       )}
       <div
         onClick={() => {
-          console.log(userDetails);
+          handleSave();
         }}
-        className="nav-btn hover:text-accent-content border-2 border-secondary cursor-pointer font-bold text-xl m-4 flex justify-center items-center p-4">
+        className=" border-2 border-secondary cursor-pointer font-bold text-xl m-4 flex justify-center items-center p-4">
         <span className="z-[0]">Save Template</span>
       </div>
+      <AnimatePresence mode="wait">
+        {loading && (
+          <>
+            <motion.div
+              initial={{ opacity: 0, scale: 0.98 }}
+              animate={{ opacity: [0, 1], scale: [0.98, 1] }}
+              transition={{ duration: 0.5, ease: "easeInOut" }}>
+              <div className="w-screen fixed h-screen bg-black bg-opacity-40 inset-0 flex justify-center items-center">
+                <h1 className="p-4 bg-secondary text-secondary-content rounded-xl w-[80%] md:w-1/2 text-center h-[20%] md:h-1/3 flex justify-center items-center">
+                  We are creating the registration page for you...
+                </h1>
+              </div>
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
+
+      <AnimatePresence mode="wait">
+        {success && (
+          <>
+            <motion.div
+              initial={{ opacity: 0, scale: 0.98 }}
+              animate={{ opacity: [0, 1], scale: [0.98, 1] }}
+              transition={{ duration: 0.5, ease: "easeInOut" }}>
+              <div className="w-screen fixed h-screen bg-black bg-opacity-40 inset-0 flex justify-center items-center">
+                <h1 className="p-4 bg-secondary text-secondary-content rounded-xl w-[80%] md:w-1/2 text-center h-[20%] md:h-1/3 flex justify-center items-center">
+                  Please wait a few secs while we log you in...
+                </h1>
+              </div>
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
     </>
   );
 }

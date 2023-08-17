@@ -8,9 +8,10 @@ export default function Navigation() {
   const handleLogout = () => {
     if (localStorage) {
       localStorage.removeItem("token");
+      localStorage.removeItem("event");
     }
     setToken(null);
-    setStatus("unautenticated");
+    setStatus("unauthenticated");
   };
   return (
     <>

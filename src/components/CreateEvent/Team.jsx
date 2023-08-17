@@ -45,7 +45,7 @@ export default function Team() {
           </div>
           <div
             onClick={() => setTeamModal(!teamModal)}
-            className="nav-btn hover:text-accent-content mt-2 lg:mt-0 h-full border-2 border-secondary cursor-pointer flex justify-center items-center font-bold">
+            className="mt-2 hover:bg-green-800 transition-all duration-300 hover:text-accent-content lg:mt-0 h-full border-2 border-secondary cursor-pointer flex justify-center items-center font-bold">
             <h1 className="z-[0] p-2 relative">Add a field in team details</h1>
           </div>
         </div>
@@ -60,6 +60,7 @@ export default function Team() {
               return (
                 <>
                   <TeamDetailsDiv
+                    key={index}
                     index={index}
                     fields={fields}
                     setFields={setFields}
@@ -80,8 +81,9 @@ export default function Team() {
       <div
         onClick={() => {
           console.log(teamDetails);
+          console.log(fields);
         }}
-        className="nav-btn hover:text-accent-content border-2 border-secondary cursor-pointer font-bold text-xl m-4 flex justify-center items-center p-4">
+        className="hover:bg-green-800 transition-all duration-300 hover:text-accent-content border-2 border-secondary cursor-pointer font-bold text-xl m-4 flex justify-center items-center p-4">
         <span className="z-[0]">Save Template</span>
       </div>
     </>

@@ -11,13 +11,14 @@ export default function Login() {
   return (
     <main className="min-h-[70vh] w-full flex flex-col justify-center items-center">
       <GoogleLogin
+        theme="filled_black"
         shape="circle"
         clientId={process.env.GOOGLE_CLIENT_ID}
+        redirectUri={process.env.GOOGLE_REDIRECT_URI}
         onSuccess={async (res) => {
           console.log(res);
           setLoading(true);
           try {
-            // axios.post("http://localhost:8000/auth/convert-token/", {})
             const response = await fetch(
               "https://saavan23dev.onrender.com/auth/convert-token/",
               {
@@ -29,7 +30,7 @@ export default function Login() {
                   backend: "google-identity",
                   token: res.credential,
                   grant_type: "convert_token",
-                  client_id: "kM3nGTr00GxIWPFxs8cqpOe9md7jYdAf76D047fF",
+                  client_id: process.env.DJANGO_CLIENT_ID,
                   client_secret:
                     "Ui4d0m2ejOLTNhl3oYXq1VdTxlrqAvipuaV8AH4yJsvWHhcR1MjtjXwgd5xRy5KWyg9Hh3rZt6hYMfqrqE4H4B5EXIIYuuZy5C4fKl8fWASMb6eevPqQXVxkZcrg7VlN",
                 }),
@@ -41,7 +42,32 @@ export default function Login() {
               const token = {
                 access_token: data.access_token,
                 credentials: res.credential,
+                time: new Date().getTime() + 10 * 1000 * 3600,
               };
+              try {
+                const event = await fetch(
+                  "https://saavan23dev.onrender.com/organizers/event/",
+                  {
+                    method: "GET",
+                    headers: {
+                      "Content-Type": "application/json",
+                      Authorization: "Bearer " + token.access_token,
+                    },
+                  }
+                );
+                const event_data = await event.json();
+                if (event.status === 200) {
+                  console.log(event_data.name);
+                  console.log(event_data.id);
+                  const data = {
+                    name: event_data.name,
+                    id: event_data.id,
+                  };
+                  localStorage.setItem("event", JSON.stringify(event_data));
+                }
+              } catch (err) {
+                console.log(err);
+              }
               setToken(JSON.stringify(token));
               setStatus("authenticated");
 
@@ -56,8 +82,8 @@ export default function Login() {
             }
           } catch (err) {
             // setLoading(false);
-            console.log("err");
             console.log(err);
+            setToast("Something went wrong");
           }
         }}
         onFailure={(res) => console.log(res)}></GoogleLogin>

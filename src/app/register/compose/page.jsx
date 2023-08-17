@@ -1,14 +1,47 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import User from "@/components/CreateEvent/User";
 import Team from "@/components/CreateEvent/Team";
 import { motion, AnimatePresence } from "framer-motion";
+import { useAuth } from "@/context/AuthContext";
 
 export default function Compose() {
   const [checkedUser, setCheckedUser] = useState(false);
   const [checkedTeam, setCheckedTeam] = useState(false);
+  const { status } = useAuth();
+  const [event, setEvent] = useState(null);
+  useEffect(() => {
+    if (typeof window !== "undefined" && !event) {
+      if (localStorage.getItem("event")) {
+        setEvent(JSON.parse(localStorage.getItem("event")));
+      }
+    }
+  });
 
+  useEffect(() => {
+    console.log(event);
+  }, [event]);
+
+  if (status === "loading") {
+    return (
+      <>
+        <main className="fixed w-screen h-screen inset-0 bg-black bg-opacity-50 flex justify-center items-center">
+          <div className="w-32 h-32 bg-white rounded-full" />
+        </main>
+      </>
+    );
+  }
+  if (status === "unauthenticated") {
+    return (
+      <>
+        <div className="flex flex-col gap-2 justify-center items-center min-h-[70vh]">
+          <h1 className="text-4xl font-bold">Unauthenticated</h1>
+          <p>You are not logged in</p>
+        </div>
+      </>
+    );
+  }
   return (
     <div className="w-full flex flex-col justify-center items-center">
       <main className="w-full md:w-[70%] flex flex-col gap-2">
