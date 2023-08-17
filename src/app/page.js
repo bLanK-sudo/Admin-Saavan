@@ -7,6 +7,12 @@ import Link from "next/link";
 export default function Home() {
   const { token, status } = useAuth();
   const [user, setUser] = useState(null);
+  const [event, setEvent] = useState(null);
+  useEffect(() => {
+    if (!token) {
+      setUser(null);
+    }
+  }, [token]);
   useEffect(() => {
     let cred;
     if (token && status === "authenticated") {
@@ -15,7 +21,16 @@ export default function Home() {
       setUser(cred);
     }
   }, [token]);
-  // console.log(status);
+  useEffect(() => {
+    if (typeof window !== "undefined" && !event) {
+      setEvent(JSON.parse(localStorage.getItem("event")));
+    }
+  });
+
+  useEffect(() => {
+    console.log(event);
+  }, [event]);
+
   if (status === "loading") {
     return (
       <>
@@ -54,16 +69,45 @@ export default function Home() {
           </div>
         </div>
         <div className="flex gap-4 justify-center items-center">
-          <Link
-            href="/event/create"
-            className="p-2 px-4 rounded-xl border-2 border-accent hover:bg-accent hover:text-accent-content transition-all duration-300 font-bold">
-            Create Event Page
-          </Link>
-          <Link
-            href="/register/compose"
-            className="p-2 px-4 rounded-xl border-2 border-accent hover:bg-accent hover:text-accent-content transition-all duration-300 font-bold">
-            Create Registration Page
-          </Link>
+          {event ? (
+            <>
+              <Link
+                href="/event/create"
+                className="p-2 px-4 rounded-xl border-2 border-accent hover:bg-accent hover:text-accent-content transition-all duration-300 font-bold">
+                Edit {event.name} page
+              </Link>
+              {event.template.length > 0 ? (
+                <>
+                  <Link
+                    href="/register/compose"
+                    className="p-2 px-4 rounded-xl border-2 border-accent hover:bg-accent hover:text-accent-content transition-all duration-300 font-bold">
+                    Edit Registration Page
+                  </Link>
+                </>
+              ) : (
+                <>
+                  <Link
+                    href="/register/compose"
+                    className="p-2 px-4 rounded-xl border-2 border-accent hover:bg-accent hover:text-accent-content transition-all duration-300 font-bold">
+                    Create Registration Page
+                  </Link>
+                </>
+              )}
+            </>
+          ) : (
+            <>
+              <Link
+                href="/event/create"
+                className="p-2 px-4 rounded-xl border-2 border-accent hover:bg-accent hover:text-accent-content transition-all duration-300 font-bold">
+                Create event page
+              </Link>
+              <Link
+                href="/register/compose"
+                className="p-2 px-4 rounded-xl border-2 border-accent hover:bg-accent hover:text-accent-content transition-all duration-300 font-bold">
+                Create Registration Page
+              </Link>
+            </>
+          )}
         </div>
       </main>
     );

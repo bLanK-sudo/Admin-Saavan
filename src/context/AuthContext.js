@@ -18,9 +18,17 @@ const AuthProvider = ({ children }) => {
       let flag = false;
       if (typeof window !== "undefined") {
         if (localStorage.getItem("token")) {
-          setToken(localStorage.getItem("token"));
-          setStatus("authenticated");
-          flag = true;
+          const parsed = JSON.parse(localStorage.getItem("token"));
+          console.log(parsed.time < new Date().getTime());
+          if (parsed.time < new Date().getTime()) {
+            localStorage.removeItem("token");
+            setStatus("unauthenticated");
+            getUser();
+          } else {
+            setToken(localStorage.getItem("token"));
+            setStatus("authenticated");
+            flag = true;
+          }
         }
       }
       if (!flag) {
