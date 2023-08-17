@@ -1,4 +1,4 @@
-import {FaMapLocationDot} from 'react-icons/fa6'
+import {FaCalendar, FaFacebook, FaInstagram, FaLink, FaMapLocationDot, FaPaperclip, FaTwitter, FaVideo, FaYoutube} from 'react-icons/fa6'
 
 const EventRegisterationCTA = ({...props}) => {
     return (
@@ -16,20 +16,75 @@ const Anchor = ({children, ...props}) => {
     )
 }
 
-const Title = ({title, ...props}) => {
+const Title = ({title, sponsors, dates, links, venue, category, ...props}) => {
+
+    const SponsorItem = ({name, logo, website, type, ...props}) => {
+        return (
+            <div>
+                <h6>{type}</h6>
+                <img src={logo} />
+                <a href={website} target="_blank">{name}</a>
+            </div>
+        )
+    }
+
+    const IconLinkRow = ({children, link}) => {
+        return (
+            <div className='flex items-center'>
+                <span className='icon'>
+                    {children}
+                </span>
+                <span className='icon-text'>
+                    <a href={link} target="_blank">{link}</a>
+                </span>
+            </div>
+        )
+    }
+
+    const LinkMaps = ({k, url}) => {
+        return {
+            meet: ((u) => <IconLinkRow link={u}><FaVideo /></IconLinkRow>),
+            facebook: ((u) => <IconLinkRow link={u}><FaFacebook /></IconLinkRow>),
+            instagram: ((u) => <IconLinkRow link={u}><FaInstagram /></IconLinkRow>),
+            youtube: ((u) => <IconLinkRow link={u}><FaYoutube /></IconLinkRow>),
+            twitter: ((u) => <IconLinkRow link={u}><FaTwitter /></IconLinkRow>),
+            website: ((u) => <IconLinkRow link={u}><FaLink /></IconLinkRow>),
+            misc: ((u) => <IconLinkRow link={u}><FaPaperclip /></IconLinkRow>),
+        }[k](url)
+    }
+
     return (
     <div className="title-wrapper">
         <div className="title-container">
             <h1 className="title">{title}</h1>
             {/* <div className="sub-title">{subtitle}</div> */}
             <div className='py-3'>
-                <div className='flex items-center'>
-                    <span className='icon'>
-                        <FaMapLocationDot />
-                    </span>
-                    <span className='icon-text'>
-                        
-                    </span>
+                <span class="bg-indigo-100 text-indigo-800 text-xs font-medium mr-2 px-2.5 py-1 rounded-full dark:bg-indigo-900 dark:text-indigo-300">{category}</span>
+                <div className="flex">
+                    <div className="left">
+                        <div className='flex items-center'>
+                            <span className='icon'>
+                                <FaMapLocationDot />
+                            </span>
+                            <span className='icon-text'>
+                                {venue}
+                            </span>
+                        </div>
+                        <div className='flex items-center'>
+                            <span className='icon'>
+                                <FaCalendar />
+                            </span>
+                            <span className='icon-text'>
+                                {dates.date}
+                            </span>
+                        </div>
+                    </div>
+                    <div className="right">
+                        {Object.keys(links).map((k, ind) => <LinkMaps k={k} key={`${k}_${ind}`} url={links[k]} />)}
+                    </div>
+                </div>
+                <div className="flex items-center justify-center flex-wrap">
+                    {sponsors.map((item, ind) => <SponsorItem key={ind} {...item} />)}
                 </div>
             </div>
         </div>

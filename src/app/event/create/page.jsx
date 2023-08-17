@@ -214,6 +214,13 @@ export default function CreateEvent() {
   const [eventDetails, setEventDetails] = useState({ ...emptyEventDetailsObj });
   const [judges, setJudges] = useState([{ ...emptyJudgeObj }]);
   const [teammates, setTeammates] = useState([{ ...emptyTeammateObj }]);
+  const [headerImg, setHeaderImg] = useState('')
+
+  const setDriveLink = (l, s) => {
+    const id = l.split('/')[5]
+    const nl = `https://drive.google.com/uc?id=${id}&export=download`
+    s(nl)
+  }
 
   const submitData = (e) => {
     const categoriesMap = {
@@ -233,6 +240,7 @@ export default function CreateEvent() {
       location: eventDetails.location,
       max_participants: eventDetails.maxParticipants,
       is_team_event: eventDetails.isTeamEvent,
+      header_img: headerImg,
       meet_link: getInformativeLinkFromKey("meet"),
       fb_link: getInformativeLinkFromKey("facebook"),
       ig_link: getInformativeLinkFromKey("instagram"),
@@ -240,13 +248,9 @@ export default function CreateEvent() {
       twitter_link: getInformativeLinkFromKey("twitter"),
       website_link: getInformativeLinkFromKey("website"),
       misc_link: getInformativeLinkFromKey("misc"),
-      registration_start_date: new Date(
-        eventDetails.registrationStartDate
-      ).toISOString(),
-      registration_end_date: new Date(
-        eventDetails.registrationEndDate
-      ).toISOString(),
-      date: new Date(eventDetails.eventDate).toISOString(),
+      registration_start_date: (new Date(eventDetails.registrationStartDate)).toISOString(),
+      registration_end_date: (new Date(eventDetails.registrationEndDate)).toISOString(),
+      date: (new Date(eventDetails.eventDate)).toISOString(),
       category: categoriesMap[eventDetails.category],
       team: [...teammates],
       judges: [...judges],
@@ -275,8 +279,7 @@ export default function CreateEvent() {
     };
     console.log(JSON.stringify(payload));
     const accessToken = token.accessToken
-    axios
-      .post(
+    axios.post(
         "events/create-event/",
         { ...payload },
         { headers: { Authorization: `Bearer ${accessToken}` } }
@@ -390,7 +393,7 @@ export default function CreateEvent() {
               <input
                 type="number"
                 className="outline-none p-4 bg-primary text-primary-content"
-                placeholder="Event Name"
+                placeholder="Max participants"
                 onChange={(e) =>
                   updateObjValue(
                     e,
@@ -400,6 +403,18 @@ export default function CreateEvent() {
                   )
                 }
                 value={eventDetails.maxParticipants}
+              />
+            </div>
+            <div className="flex w-full items-center border-b-2 border-secondary">
+              <label className="min-w-[35%] bg-primary text-primary-content p-4 h-full border-r-2 border-secondary font-extrabold uppercase">
+                Event's header image
+              </label>
+              <input
+                type="text"
+                className="outline-none p-4 bg-primary text-primary-content"
+                placeholder="Event Name"
+                onChange={(e) => setDriveLink(e.target.value, setHeaderImg)}
+                value={headerImg}
               />
             </div>
             {/* <div className="flex w-full items-center border-b-2 border-secondary">
@@ -481,7 +496,7 @@ export default function CreateEvent() {
             <div className="flex flex-col w-full justify-start items-center p-1">
               <label className="w-full flex flex-wrap justify-between items-center bg-primary text-primary-content border-2 border-secondary">
                 <div className="p-4 font-extrabold uppercase">
-                  Informative Links
+                  Team mates
                 </div>
                 <div className="lg:h-full grid grid-cols-1 lg:grid-cols-2 justify-center items-center">
                   <button
@@ -623,8 +638,8 @@ export default function CreateEvent() {
           className="min-h-[500px]"
         />
         <EventPageTemplate
-          title={eventDetails.name}
-          subtitle={"Random small description"}
+          eventName={eventDetails.name}
+          
           data={value}
         />
         <button

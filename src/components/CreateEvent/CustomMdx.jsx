@@ -19,7 +19,8 @@ const components = {
   },
   a: {
     component: Anchor
-  }
+  },
+  
 }
 
 export default function CustomMDX({ source }) {
