@@ -1,4 +1,5 @@
 import "./globals.css";
+import "./scss/event.scss"
 import { Poppins } from "next/font/google";
 import Provider from "@/components/provider/Provider";
 import Navigation from "@/components/navigation/Navigation";
