@@ -1,5 +1,8 @@
 import {FaCalendar, FaFacebook, FaInstagram, FaLink, FaMapLocationDot, FaPaperclip, FaTwitter, FaVideo, FaYoutube} from 'react-icons/fa6'
 
+import { categoriesMap } from '@components/constants'
+import moment from 'moment'
+
 const EventRegisterationCTA = ({...props}) => {
     return (
     <div className="scroll-btn-container">
@@ -20,9 +23,9 @@ const Title = ({title, sponsors, dates, links, venue, category, ...props}) => {
 
     const SponsorItem = ({name, logo, website, type, ...props}) => {
         return (
-            <div>
+            <div className='mr-5 text-center mt-3'>
                 <h6>{type}</h6>
-                <img src={logo} />
+                <img src={logo} style={{maxWidth: '150px', height: 'auto', width: '100%'}} />
                 <a href={website} target="_blank">{name}</a>
             </div>
         )
@@ -30,7 +33,7 @@ const Title = ({title, sponsors, dates, links, venue, category, ...props}) => {
 
     const IconLinkRow = ({children, link}) => {
         return (
-            <div className='flex items-center'>
+            <div className='flex items-center mb-3'>
                 <span className='icon'>
                     {children}
                 </span>
@@ -52,17 +55,17 @@ const Title = ({title, sponsors, dates, links, venue, category, ...props}) => {
             misc: ((u) => <IconLinkRow link={u}><FaPaperclip /></IconLinkRow>),
         }[k](url)
     }
-
+    console.log(dates.date)
     return (
     <div className="title-wrapper">
         <div className="title-container">
             <h1 className="title">{title}</h1>
             {/* <div className="sub-title">{subtitle}</div> */}
             <div className='py-3'>
-                <span class="bg-indigo-100 text-indigo-800 text-xs font-medium mr-2 px-2.5 py-1 rounded-full dark:bg-indigo-900 dark:text-indigo-300">{category}</span>
-                <div className="flex">
+                <span class="bg-indigo-100 text-indigo-800 text-xs font-medium mr-2 px-2.5 py-1 rounded-full dark:bg-indigo-900 dark:text-indigo-300">{categoriesMap[category]}</span>
+                <div className="md:flex justify-between block">
                     <div className="left">
-                        <div className='flex items-center'>
+                        <div className='flex items-center mb-3 mt-3'>
                             <span className='icon'>
                                 <FaMapLocationDot />
                             </span>
@@ -70,17 +73,17 @@ const Title = ({title, sponsors, dates, links, venue, category, ...props}) => {
                                 {venue}
                             </span>
                         </div>
-                        <div className='flex items-center'>
+                        <div className='flex items-center mb-3'>
                             <span className='icon'>
                                 <FaCalendar />
                             </span>
                             <span className='icon-text'>
-                                {dates.date}
+                                {moment(dates.event_start_date).format('MMMM Do YYYY, h:mm a')}
                             </span>
                         </div>
                     </div>
                     <div className="right">
-                        {Object.keys(links).map((k, ind) => <LinkMaps k={k} key={`${k}_${ind}`} url={links[k]} />)}
+                        {Object.keys(links).map((k, ind) => links[k] ? <LinkMaps k={k} key={`${k}_${ind}`} url={links[k]} />:<></>)}
                     </div>
                 </div>
                 <div className="flex items-center justify-center flex-wrap">

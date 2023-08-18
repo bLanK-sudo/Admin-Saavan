@@ -20,6 +20,7 @@ import rehypeSanitize from "rehype-sanitize";
 import EventPageTemplate from "@/components/CreateEvent/EventPageTemplate.jsx";
 import axios from "@/components/axios";
 import { useAuth } from "@/context/AuthContext";
+import { categoriesMap } from "@/components/constants";
 
 const InformativeLink = ({ name, value, setName, setValue }) => {
   return (
@@ -178,9 +179,9 @@ export default function CreateEvent() {
   const emptyEventDetailsObj = {
     name: "Event Name",
     category: "",
-    eventDate: "",
-    registrationStartDate: "",
-    registrationEndDate: "",
+    eventDate: new Date(),
+    registrationStartDate: new Date(),
+    registrationEndDate: new Date(),
     location: "",
     maxParticipants: 0,
     isTeamEvent: false,
@@ -222,19 +223,9 @@ export default function CreateEvent() {
     s(nl)
   }
 
-  const submitData = (e) => {
-    const categoriesMap = {
-      technical: 1,
-      cultural: 2,
-      professional: 3,
-      sports: 4,
-      workshops: 5,
-    };
+  const getInformativeLinkFromKey = (key) => infol.filter(({ name }) => name == key)[0]?.value ?? "";
 
-    const getInformativeLinkFromKey = (key) =>
-      infol.filter(({ name }) => name == key)[0]?.value ?? "";
-
-    const payload = {
+  const getPayload = () => ({
       name: eventDetails.name,
       description: value,
       location: eventDetails.location,
@@ -276,7 +267,10 @@ export default function CreateEvent() {
       //     "image": ""
       //   }
       // ],
-    };
+  })
+
+  const submitData = (e) => {
+    const payload = getPayload()
     console.log(JSON.stringify(payload));
     const accessToken = token.accessToken
     axios.post(
@@ -328,6 +322,35 @@ export default function CreateEvent() {
     if (arr.length > 1) arr.pop();
     s([...arr]);
   };
+  const {
+    meet_link,
+    fb_link,
+    ig_link,
+    yt_link,
+    twitter_link,
+    website_link,
+    misc_link,
+    registration_start_date,
+    registration_end_date,
+    date,
+    ...p
+  } = getPayload()
+
+  const links = {
+    facebook: fb_link,
+    twitter: twitter_link,
+    instagram: ig_link,
+    website: website_link,
+    misc: misc_link,
+    meet: meet_link,
+    youtube: yt_link,
+  }
+  const dates = {
+    event_start_date: date,
+    event_end_date: '',
+    registration_start_date,
+    registration_end_date,
+  }
 
   return (
     <>
@@ -360,6 +383,9 @@ export default function CreateEvent() {
                   updateObjValue(e, eventDetails, "category", setEventDetails)
                 }
                 value={eventDetails.category}>
+                <option value="" defaultChecked>
+                  (Select a category)
+                </option>
                 <option value="cultural">Cultural</option>
                 <option value="sports">Sports</option>
                 <option value="technical">Technical</option>
@@ -639,8 +665,10 @@ export default function CreateEvent() {
         />
         <EventPageTemplate
           eventName={eventDetails.name}
-          
+          dates={dates}
+          links={links}
           data={value}
+          {...p}
         />
         <button
           className="p-2 px-4 bg-green-500 border border-black uppercase"

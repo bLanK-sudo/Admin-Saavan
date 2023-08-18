@@ -43,11 +43,11 @@ export default function CreateEvent() {
   }
 
   useEffect(() => {
-    axios.get('event')
-    .then((res) => setResData(...res.data))
-    .catch((err) => {
-      if(err.response) console.log(err)
-    })
+    // axios.get('event')
+    // .then((res) => setResData(...res.data))
+    // .catch((err) => {
+    //   if(err.response) console.log(err)
+    // })
   }, [])
 
   return (
