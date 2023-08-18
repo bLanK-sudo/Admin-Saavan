@@ -7,13 +7,18 @@ export default function UserModal({ setModal, setUserDetails, userDetails }) {
             <h1 className="text-2xl font-bold">Add a field</h1>
             <div className="flex flex-col gap-2">
               <input
+                id="field_name"
+                type="text"
+                className="outline-none p-4 bg-primary text-primary-content w-full border-2 border-secondary"
+                placeholder="Input Name"
+              />
+              <input
                 id="placeholder"
                 type="text"
                 className="outline-none p-4 bg-primary text-primary-content w-full border-2 border-secondary"
                 placeholder="Input Placeholder"
               />
               <select
-                name=""
                 id="type"
                 defaultValue={"text"}
                 className="outline-none p-4 bg-primary text-primary-content w-full border-2 border-secondary">
@@ -21,8 +26,6 @@ export default function UserModal({ setModal, setUserDetails, userDetails }) {
                 <option value="number">Number</option>
                 <option value="url">URL</option>
                 <option value="email">Email</option>
-                <option value="checkbox">CheckBox</option>
-                <option value="radio">Radio</option>
                 <option value="textarea">TextArea</option>
               </select>
             </div>
@@ -38,9 +41,12 @@ export default function UserModal({ setModal, setUserDetails, userDetails }) {
                 onClick={() => {
                   if (document.getElementById("placeholder").value === "")
                     return;
+                  if (document.getElementById("field_name").value === "")
+                    return;
                   setModal(false);
                   let newField = {
-                    name: document.getElementById("placeholder").value,
+                    name: document.getElementById("field_name").value,
+                    placeholder: document.getElementById("placeholder").value,
                     type: document.getElementById("type").value,
                     options: [],
                   };

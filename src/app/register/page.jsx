@@ -7,8 +7,13 @@ const abril = Abril_Fatface({ subsets: ["latin"], weight: ["400"] });
 
 export default function Register() {
   const { status } = useAuth();
-  const data = [
-    { name: "In Game ID", type: "text", options: [] },
+  const userData = [
+    {
+      name: "In Game ID",
+      placeholder: "Example ungaaya#soru",
+      type: "text",
+      options: [],
+    },
     {
       name: "Have u played this before",
       type: "checkbox",
@@ -16,6 +21,11 @@ export default function Register() {
     },
   ];
 
+  const teamData = {
+    members: 3,
+    fields: [{ name: "Team Name", type: "text" }],
+  };
+  const length = new Array(teamData.members).fill(0);
   if (status === "loading") {
     return (
       <>
@@ -67,7 +77,7 @@ export default function Register() {
                   placeholder="Student Email"
                 />
               </div>
-              {data.map((detail, index) => {
+              {userData.map((detail, index) => {
                 console.log(index);
                 if (detail.type == "textarea") {
                   return (
@@ -84,6 +94,7 @@ export default function Register() {
                         className="outline-none p-4 bg-primary text-primary-content w-full border-b-2 border-secondary "
                         name=""
                         id=""
+                        placeholder={detail.placeholder}
                         cols="30"
                         rows="10"></textarea>
                     </div>
@@ -139,7 +150,7 @@ export default function Register() {
                         id="name"
                         type={detail.type}
                         className="outline-none p-4 bg-primary text-primary-content w-full"
-                        placeholder={detail.name}
+                        placeholder={detail.placeholder}
                       />
                     </div>
                   );
@@ -167,92 +178,57 @@ export default function Register() {
             Team Details
           </div>
           <div className="flex flex-col w-full border-2 border-secondary bg-oppaccent">
-            <div className="m-1 border-2 border-secondary">
-              <div className="flex border-b-2 items-center border-secondary">
-                <h1 className="border-secondary outline-none p-4 bg-primary text-primary-content w-full font-bold">
-                  Team Member 1
-                </h1>
-              </div>
-              <div className="flex border-b-2 items-center border-secondary">
-                <input
-                  id="name"
-                  type="text"
-                  className="border-secondary outline-none p-4 bg-primary text-primary-content w-full"
-                  placeholder="Full Name"
-                />
-              </div>
-              <div className="flex items-center border-secondary">
-                <label
-                  className="min-w-[35%] border-r-2 border-secondary p-4 bg-primary text-primary-content"
-                  htmlFor="name">
-                  ID
-                </label>
-                <input
-                  id="name"
-                  type="text"
-                  className="border-secondary outline-none p-4 bg-primary text-primary-content w-full"
-                  placeholder="Student ID"
-                />
-              </div>
-            </div>
-
-            <div className="m-1 border-2 border-secondary">
-              <div className="flex border-b-2 items-center border-secondary">
-                <h1 className="border-secondary outline-none p-4 bg-primary text-primary-content w-full font-bold">
-                  Team Member 1
-                </h1>
-              </div>
-              <div className="flex border-b-2 items-center border-secondary">
-                <input
-                  id="name"
-                  type="text"
-                  className="border-secondary outline-none p-4 bg-primary text-primary-content w-full"
-                  placeholder="Full Name"
-                />
-              </div>
-              <div className="flex items-center border-secondary">
-                <label
-                  className="min-w-[35%] border-r-2 border-secondary p-4 bg-primary text-primary-content"
-                  htmlFor="name">
-                  ID
-                </label>
-                <input
-                  id="name"
-                  type="text"
-                  className="border-secondary outline-none p-4 bg-primary text-primary-content w-full"
-                  placeholder="Student ID"
-                />
-              </div>
-            </div>
-
-            <div className="m-1 border-2 border-secondary">
-              <div className="flex border-b-2 items-center border-secondary">
-                <h1 className="border-secondary outline-none p-4 bg-primary text-primary-content w-full font-bold">
-                  Team Member 1
-                </h1>
-              </div>
-              <div className="flex border-b-2 items-center border-secondary">
-                <input
-                  id="name"
-                  type="text"
-                  className="border-secondary outline-none p-4 bg-primary text-primary-content w-full"
-                  placeholder="Full Name"
-                />
-              </div>
-              <div className="flex items-center border-secondary">
-                <label
-                  className="min-w-[35%] border-r-2 border-secondary p-4 bg-primary text-primary-content"
-                  htmlFor="name">
-                  ID
-                </label>
-                <input
-                  id="name"
-                  type="text"
-                  className="border-secondary outline-none p-4 bg-primary text-primary-content w-full"
-                  placeholder="Student ID"
-                />
-              </div>
-            </div>
+            {length.map((_, index) => {
+              return (
+                <div key={index} className="m-1 border-2 border-secondary">
+                  <div className="flex border-b-2 items-center border-secondary">
+                    <h1 className="border-secondary outline-none p-4 bg-primary text-primary-content w-full font-bold">
+                      Team Member {index + 1}
+                    </h1>
+                  </div>
+                  <div className="flex border-b-2 items-center border-secondary">
+                    <input
+                      id="name"
+                      type="text"
+                      className="border-secondary outline-none p-4 bg-primary text-primary-content w-full"
+                      placeholder="Full Name"
+                    />
+                  </div>
+                  <div className="flex items-center border-b-2 border-secondary">
+                    <label
+                      className="min-w-[35%] border-r-2 border-secondary p-4 bg-primary text-primary-content"
+                      htmlFor="email">
+                      Email
+                    </label>
+                    <input
+                      id="email"
+                      type="text"
+                      className="border-secondary outline-none p-4 bg-primary text-primary-content w-full"
+                      placeholder="Student Email"
+                    />
+                  </div>
+                  {teamData.fields.map((field, ind) => {
+                    return (
+                      <div
+                        key={ind}
+                        className="flex items-center border-secondary">
+                        <label
+                          className="min-w-[35%] border-r-2 border-secondary p-4 bg-primary text-primary-content"
+                          htmlFor={field.name}>
+                          {field.name}
+                        </label>
+                        <input
+                          id={field.name}
+                          type="text"
+                          className="border-secondary outline-none p-4 bg-primary text-primary-content w-full"
+                          placeholder=""
+                        />
+                      </div>
+                    );
+                  })}
+                </div>
+              );
+            })}
           </div>
         </div> */}
       </main>

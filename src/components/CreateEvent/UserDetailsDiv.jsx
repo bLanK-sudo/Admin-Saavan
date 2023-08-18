@@ -28,6 +28,7 @@ export default function UserDetails({
           id=""
           disabled
           cols="30"
+          placeholder={detail.placeholder}
           rows="10"></textarea>
       </div>
     );
@@ -81,7 +82,7 @@ export default function UserDetails({
           type={detail.type}
           disabled
           className="outline-none p-4 bg-primary text-primary-content w-full"
-          placeholder={detail.name}
+          placeholder={detail.placeholder}
         />
         <div
           onClick={() => {

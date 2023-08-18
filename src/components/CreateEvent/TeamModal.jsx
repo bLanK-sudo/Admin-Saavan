@@ -7,6 +7,12 @@ export default function TeamModal({ setTeamModal, fields, setFields }) {
             <h1 className="text-2xl font-bold">Add a field</h1>
             <div className="flex flex-col gap-2">
               <input
+                id="field_name"
+                type="text"
+                placeholder="Input Name"
+                className="outline-none p-4 bg-primary text-primary-content w-full border-2 border-secondary"
+              />
+              <input
                 id="placeholder"
                 type="text"
                 className="outline-none p-4 bg-primary text-primary-content w-full border-2 border-secondary"
@@ -36,12 +42,13 @@ export default function TeamModal({ setTeamModal, fields, setFields }) {
                 onClick={() => {
                   if (document.getElementById("placeholder").value === "")
                     return;
+                  if (document.getElementById("field_name").value === "")
+                    return;
                   setTeamModal(false);
-                  console.log();
                   let newField = {
-                    name: document.getElementById("placeholder").value,
+                    name: document.getElementById("field_name").value,
+                    placeholder: document.getElementById("placeholder").value,
                     type: document.getElementById("type").value,
-                    options: [],
                   };
                   setFields([...fields, newField]);
                 }}

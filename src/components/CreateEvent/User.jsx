@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import UserDetails from "./UserDetailsDiv";
 import { AnimatePresence, motion } from "framer-motion";
 import UserOptionsModal from "./UserOptionsModal";
@@ -46,6 +46,9 @@ export default function User() {
       console.log(err);
     }
   };
+  useEffect(() => {
+    console.log(userDetails);
+  }, [userDetails]);
   return (
     <>
       <div className="grid grid-cols-1 lg:grid-cols-2 border-2 border-secondary m-4">
@@ -53,7 +56,7 @@ export default function User() {
           User Details
         </div>
         <div className=" flex flex-col w-full ">
-          <motion.div layout className="m-1 flex gap-2 flex-col">
+          <motion className="m-1 flex gap-2 flex-col">
             <div className=" flex flex-col border-2 items-center border-secondary">
               <input
                 id="name"
@@ -88,7 +91,7 @@ export default function User() {
                 />
               );
             })}
-          </motion.div>
+          </motion>
           <div
             onClick={() => {
               setModal(true);
