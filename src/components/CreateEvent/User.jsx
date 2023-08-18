@@ -79,15 +79,13 @@ export default function User() {
             </div>
             {userDetails.map((detail, index) => {
               return (
-                <>
-                  <UserDetails
-                    key={index}
-                    detail={detail}
-                    index={index}
-                    userDetails={userDetails}
-                    setUserDetails={setUserDetails}
-                  />
-                </>
+                <UserDetails
+                  key={index}
+                  detail={detail}
+                  index={index}
+                  userDetails={userDetails}
+                  setUserDetails={setUserDetails}
+                />
               );
             })}
           </motion.div>
@@ -126,7 +124,7 @@ export default function User() {
         onClick={() => {
           handleSave();
         }}
-        className=" border-2 border-secondary cursor-pointer font-bold text-xl m-4 flex justify-center items-center p-4">
+        className="hover:bg-accent transition-all hover:text-accent-content duration-300 border-2 border-secondary cursor-pointer font-bold text-xl m-4 flex justify-center items-center p-4">
         <span className="z-[0]">Save Template</span>
       </div>
       <AnimatePresence mode="wait">

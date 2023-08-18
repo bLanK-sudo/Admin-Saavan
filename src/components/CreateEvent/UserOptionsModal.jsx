@@ -40,7 +40,6 @@ export default function UserOptionsModal({
                 </div>
                 <div
                   onClick={() => {
-                    console.log();
                     let div = document.createElement("div");
                     div.className = "flex gap-2  border-2 border-secondary";
                     let remove = document.createElement("div");
@@ -80,9 +79,6 @@ export default function UserOptionsModal({
                   if (document.getElementById("placeholder").value === "")
                     return;
                   let options = [];
-                  console.log(
-                    document.getElementById("user_options").childNodes
-                  );
                   Array.from(
                     document.getElementById("user_options").children
                   ).forEach((element) => {
@@ -95,7 +91,6 @@ export default function UserOptionsModal({
                     options: options,
                   };
                   setUserDetails([...userDetails, newField]);
-                  console.log(userDetails);
                 }}
                 className="p-2 px-4 hover:text-accent-content nav-btn border-2 border-secondary">
                 <span className="z-[0] relative">Save</span>

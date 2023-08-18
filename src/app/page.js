@@ -27,10 +27,6 @@ export default function Home() {
     }
   });
 
-  useEffect(() => {
-    console.log(event);
-  }, [event]);
-
   if (status === "loading") {
     return (
       <>

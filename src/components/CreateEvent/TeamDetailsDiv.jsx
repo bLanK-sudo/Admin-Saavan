@@ -1,12 +1,8 @@
 import { BsXCircleFill } from "react-icons/bs";
-import { motion } from "framer-motion";
 export default function TeamDetailsDiv({ index, fields, setFields }) {
   return (
     <>
-      <div key={index} id={index}>
-        <div className="m-1 p-4 font-bold flex flex-col border-2 items-start border-secondary">
-          Team Member {index + 1}
-        </div>
+      <div>
         <div className=" m-1 flex gap-2 flex-col">
           <div className=" flex flex-col border-2 items-center border-secondary">
             <input
@@ -15,13 +11,6 @@ export default function TeamDetailsDiv({ index, fields, setFields }) {
               disabled
               className="outline-none p-4 bg-primary text-primary-content w-full border-b-2 border-secondary"
               placeholder="Full Name"
-            />
-            <input
-              id="name"
-              type="number"
-              disabled
-              className="outline-none p-4 bg-primary text-primary-content w-full border-b-2 border-secondary"
-              placeholder="Phone"
             />
             <div className="flex w-full items-center">
               <label
@@ -38,8 +27,6 @@ export default function TeamDetailsDiv({ index, fields, setFields }) {
               />
             </div>
             {fields.map((detail, ind) => {
-              console.log("ind", ind + 1 + "" + index);
-              console.log("index", index);
               if (detail.type == "textarea") {
                 return (
                   <div

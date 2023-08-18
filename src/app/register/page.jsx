@@ -7,6 +7,14 @@ const abril = Abril_Fatface({ subsets: ["latin"], weight: ["400"] });
 
 export default function Register() {
   const { status } = useAuth();
+  const data = [
+    { name: "In Game ID", type: "text", options: [] },
+    {
+      name: "Have u played this before",
+      type: "checkbox",
+      options: ["Yes", "No"],
+    },
+  ];
 
   if (status === "loading") {
     return (
@@ -50,15 +58,93 @@ export default function Register() {
                 <label
                   className="min-w-[35%] bg-primary text-primary-content border-r-2 border-b-2 border-secondary p-4"
                   htmlFor="name">
-                  ID
+                  Email
                 </label>
                 <input
                   id="name"
-                  type="text"
+                  type="email"
                   className="border-secondary border-b-2 outline-none p-4 bg-primary text-primary-content w-full"
-                  placeholder="Student ID"
+                  placeholder="Student Email"
                 />
               </div>
+              {data.map((detail, index) => {
+                console.log(index);
+                if (detail.type == "textarea") {
+                  return (
+                    <div
+                      key={index}
+                      id={index + "textarea"}
+                      className="flex flex-col w-full justify-start items-center">
+                      <label
+                        className="w-full flex justify-between bg-primary text-primary-content border-2 border-secondary"
+                        htmlFor="name">
+                        <span className="p-4">{detail.name}</span>
+                      </label>
+                      <textarea
+                        className="outline-none p-4 bg-primary text-primary-content w-full border-b-2 border-secondary "
+                        name=""
+                        id=""
+                        cols="30"
+                        rows="10"></textarea>
+                    </div>
+                  );
+                } else if (
+                  detail.type == "checkbox" ||
+                  detail.type == "radio"
+                ) {
+                  return (
+                    <div
+                      key={index}
+                      id={index + "checkbox"}
+                      className="flex flex-col w-full justify-start items-center">
+                      <div className="w-full flex h-full justify-between bg-primary text-primary-content border-b-2 border-secondary">
+                        <span className="p-4">{detail.name}</span>
+                      </div>
+                      <div className="flex flex-col justify-center w-full items-start p-4 border-b-2 border-secondary gap-4">
+                        {detail.options.map((option, ind) => {
+                          return (
+                            <div
+                              key={ind + 3}
+                              id={ind + "options"}
+                              className="flex gap-2 text-xl">
+                              <input
+                                name={detail.name}
+                                className=" cursor-pointer"
+                                id={ind + "" + index}
+                                type={detail.type}
+                              />
+                              <label
+                                className=" cursor-pointer"
+                                htmlFor={ind + "" + index}>
+                                {option}
+                              </label>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  );
+                } else {
+                  return (
+                    <div
+                      key={index + 1}
+                      id={index + "input"}
+                      className="flex w-full items-center border-b-2 border-secondary">
+                      <label
+                        className="min-w-[35%] bg-primary text-primary-content p-4 border-r-2 border-secondary"
+                        htmlFor={index}>
+                        {detail.name}
+                      </label>
+                      <input
+                        id="name"
+                        type={detail.type}
+                        className="outline-none p-4 bg-primary text-primary-content w-full"
+                        placeholder={detail.name}
+                      />
+                    </div>
+                  );
+                }
+              })}
               <div className="flex items-center border-secondary">
                 <label
                   className="min-w-[35%] bg-primary text-primary-content border-r-2 border-secondary p-4"
@@ -76,7 +162,7 @@ export default function Register() {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 m-4">
+        {/* <div className="grid grid-cols-1 lg:grid-cols-2 m-4">
           <div className="border-2 border-b-0 lg:border-b-2 lg:border-r-0 p-4 border-secondary font-bold">
             Team Details
           </div>
@@ -168,7 +254,7 @@ export default function Register() {
               </div>
             </div>
           </div>
-        </div>
+        </div> */}
       </main>
     </>
   );

@@ -19,10 +19,6 @@ export default function Compose() {
     }
   });
 
-  useEffect(() => {
-    console.log(event);
-  }, [event]);
-
   if (status === "loading") {
     return (
       <>

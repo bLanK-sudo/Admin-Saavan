@@ -8,10 +8,7 @@ export default function UserDetails({
 }) {
   if (detail.type == "textarea") {
     return (
-      <div
-        key={index}
-        id={index + "textarea"}
-        className="flex flex-col w-full justify-start items-center">
+      <div className="flex flex-col w-full justify-start items-center">
         <label
           className="w-full flex justify-between bg-primary text-primary-content border-2 border-secondary"
           htmlFor="name">
@@ -36,10 +33,7 @@ export default function UserDetails({
     );
   } else if (detail.type == "checkbox" || detail.type == "radio") {
     return (
-      <div
-        key={index}
-        id={index + "checkbox"}
-        className="flex flex-col w-full justify-start items-center">
+      <div className="flex flex-col w-full justify-start items-center">
         <div className="w-full flex h-full justify-between bg-primary text-primary-content border-2 border-secondary">
           <span className="p-4">{detail.name}</span>
 
@@ -76,10 +70,7 @@ export default function UserDetails({
     );
   } else {
     return (
-      <div
-        key={index + 1}
-        id={index + "input"}
-        className="flex w-full items-center border-2 border-secondary">
+      <div className="flex w-full items-center border-2 border-secondary">
         <label
           className="min-w-[35%] bg-primary text-primary-content p-4 border-r-2 border-secondary"
           htmlFor={index}>
