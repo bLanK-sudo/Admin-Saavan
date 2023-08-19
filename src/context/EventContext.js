@@ -1,3 +1,4 @@
+"use client"
 import { createContext, useState, useEffect, useContext } from "react";
 
 export const EventContext = createContext();
@@ -10,7 +11,7 @@ export const useEvent = () => {
   return context;
 };
 
-const EventProvider = ({ children }) => {
+export const EventProvider = ({ children }) => {
   const [event, setEvent] = useState(null);
 
   useEffect(() => {

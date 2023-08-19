@@ -21,6 +21,7 @@ import EventPageTemplate from "@/components/CreateEvent/EventPageTemplate.jsx";
 import axios from "@/components/axios";
 import { useAuth } from "@/context/AuthContext";
 import { categoriesMap } from "@/components/constants";
+import moment from "moment";
 
 const InformativeLink = ({ name, value, setName, setValue }) => {
   return (
@@ -171,7 +172,9 @@ const JudgesRow = ({ title, setValue, ...props }) => {
 };
 
 export default function CreateEvent() {
+  
   const {token} = useAuth()
+
   const emptyDummyObj = {
     name: "",
     value: "",
@@ -230,15 +233,15 @@ export default function CreateEvent() {
       description: value,
       location: eventDetails.location,
       max_participants: eventDetails.maxParticipants,
-      is_team_event: eventDetails.isTeamEvent,
-      header_img: headerImg,
+      is_team_event: eval(eventDetails.isTeamEvent),
+      header_image: headerImg,
       meet_link: getInformativeLinkFromKey("meet"),
       fb_link: getInformativeLinkFromKey("facebook"),
       ig_link: getInformativeLinkFromKey("instagram"),
       yt_link: getInformativeLinkFromKey("youtube"),
       twitter_link: getInformativeLinkFromKey("twitter"),
-      website_link: getInformativeLinkFromKey("website"),
-      misc_link: getInformativeLinkFromKey("misc"),
+      website_links: getInformativeLinkFromKey("website"),
+      misc_links: getInformativeLinkFromKey("misc"),
       registration_start_date: (new Date(eventDetails.registrationStartDate)).toISOString(),
       registration_end_date: (new Date(eventDetails.registrationEndDate)).toISOString(),
       date: (new Date(eventDetails.eventDate)).toISOString(),
@@ -283,7 +286,8 @@ export default function CreateEvent() {
       })
       .catch((err) => {
         if (err.response) {
-          console.log(err);
+          console.log(err.response);
+          alert(err.response.data.message)
         }
       });
   };
@@ -328,8 +332,8 @@ export default function CreateEvent() {
     ig_link,
     yt_link,
     twitter_link,
-    website_link,
-    misc_link,
+    website_links,
+    misc_links,
     registration_start_date,
     registration_end_date,
     date,
@@ -340,8 +344,8 @@ export default function CreateEvent() {
     facebook: fb_link,
     twitter: twitter_link,
     instagram: ig_link,
-    website: website_link,
-    misc: misc_link,
+    website: website_links,
+    misc: misc_links,
     meet: meet_link,
     youtube: yt_link,
   }
@@ -418,7 +422,7 @@ export default function CreateEvent() {
               </label>
               <input
                 type="number"
-                className="outline-none p-4 bg-primary text-primary-content"
+                className="outline-none p-4 bg-primary text-primary-content w-full"
                 placeholder="Max participants"
                 onChange={(e) =>
                   updateObjValue(
@@ -437,8 +441,8 @@ export default function CreateEvent() {
               </label>
               <input
                 type="text"
-                className="outline-none p-4 bg-primary text-primary-content"
-                placeholder="Event Name"
+                className="outline-none p-4 bg-primary text-primary-content w-full"
+                placeholder="Insert drive link of the header image"
                 onChange={(e) => setDriveLink(e.target.value, setHeaderImg)}
                 value={headerImg}
               />
@@ -469,7 +473,7 @@ export default function CreateEvent() {
                 type="date"
                 className="outline-none p-4 bg-primary text-primary-content w-full"
                 placeholder="Event Time"
-                value={eventDetails.eventDate}
+                value={moment(eventDetails.eventDate).format('yyyy-MM-D')}
                 onChange={(e) =>
                   updateObjValue(e, eventDetails, "eventDate", setEventDetails)
                 }
@@ -484,7 +488,7 @@ export default function CreateEvent() {
                 type="date"
                 className="outline-none p-4 bg-primary text-primary-content w-full"
                 placeholder="Event Time"
-                value={eventDetails.registrationStartDate}
+                value={moment(eventDetails.registrationStartDate).format('yyyy-MM-D')}
                 onChange={(e) =>
                   updateObjValue(
                     e,
@@ -503,7 +507,7 @@ export default function CreateEvent() {
                 type="date"
                 className="outline-none p-4 bg-primary text-primary-content w-full"
                 placeholder="Event Time"
-                value={eventDetails.registrationEndDate}
+                value={moment(eventDetails.registrationEndDate).format('yyyy-MM-D')}
                 onChange={(e) =>
                   updateObjValue(
                     e,

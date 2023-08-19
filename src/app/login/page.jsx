@@ -3,7 +3,6 @@ import { useState } from "react";
 import { useAuth } from "@context/AuthContext";
 import { GoogleLogin } from "@react-oauth/google";
 import { useRouter } from "next/navigation";
-import { useEvent } from "@/context/EventContext";
 export default function Login() {
   const { setToken, setStatus } = useAuth();
   const { event, setEvent } = useEvent();

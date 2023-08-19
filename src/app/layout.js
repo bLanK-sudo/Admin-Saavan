@@ -2,6 +2,7 @@ import "./globals.css";
 import "./scss/event.scss"
 import { Poppins } from "next/font/google";
 import Provider from "@/components/provider/Provider";
+import { EventProvider } from "@/context/EventContext";
 import Navigation from "@/components/navigation/Navigation";
 
 const outfit = Poppins({
@@ -24,8 +25,10 @@ export default function RootLayout({ children }) {
         <body
           className={`${outfit.className} bg-primary text-primary-content min-h-screen`}>
           <Provider>
-            <Navigation />
-            {children}
+            <EventProvider>
+              <Navigation />
+              {children}
+            </EventProvider>
           </Provider>
         </body>
       </html>

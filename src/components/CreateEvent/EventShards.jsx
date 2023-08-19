@@ -55,14 +55,13 @@ const Title = ({title, sponsors, dates, links, venue, category, ...props}) => {
             misc: ((u) => <IconLinkRow link={u}><FaPaperclip /></IconLinkRow>),
         }[k](url)
     }
-    console.log(dates.date)
     return (
     <div className="title-wrapper">
         <div className="title-container">
             <h1 className="title">{title}</h1>
             {/* <div className="sub-title">{subtitle}</div> */}
             <div className='py-3'>
-                <span class="bg-indigo-100 text-indigo-800 text-xs font-medium mr-2 px-2.5 py-1 rounded-full dark:bg-indigo-900 dark:text-indigo-300">{categoriesMap[category]}</span>
+                <span className="bg-indigo-100 text-indigo-800 text-xs font-medium mr-2 px-2.5 py-1 rounded-full dark:bg-indigo-900 dark:text-indigo-300">{categoriesMap[category]}</span>
                 <div className="md:flex justify-between block">
                     <div className="left">
                         <div className='flex items-center mb-3 mt-3'>
@@ -78,16 +77,16 @@ const Title = ({title, sponsors, dates, links, venue, category, ...props}) => {
                                 <FaCalendar />
                             </span>
                             <span className='icon-text'>
-                                {moment(dates.event_start_date).format('MMMM Do YYYY, h:mm a')}
+                                {moment(dates.event_start_date).format('Do MMMM, YYYY')}
                             </span>
                         </div>
                     </div>
                     <div className="right">
-                        {Object.keys(links).map((k, ind) => links[k] ? <LinkMaps k={k} key={`${k}_${ind}`} url={links[k]} />:<></>)}
+                        {Object.keys(links).map((k, ind) => links[k] ? <LinkMaps k={k} key={`link_${ind}`} url={links[k]} />:'')}
                     </div>
                 </div>
                 <div className="flex items-center justify-center flex-wrap">
-                    {sponsors.map((item, ind) => <SponsorItem key={ind} {...item} />)}
+                    {sponsors.map((item, ind) => <SponsorItem key={`sponsor_${ind}`} {...item} />)}
                 </div>
             </div>
         </div>
