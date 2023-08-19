@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import { createContext, useState, useEffect, useContext } from "react";
 
 export const EventContext = createContext();
@@ -19,7 +19,7 @@ export const EventProvider = ({ children }) => {
       let flag = false;
       if (typeof window !== "undefined") {
         if (localStorage.getItem("event")) {
-          setEvent(localStorage.getItem("event"));
+          setEvent(JSON.parse(localStorage.getItem("event")));
           flag = true;
         }
       }

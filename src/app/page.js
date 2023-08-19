@@ -16,8 +16,7 @@ export default function Home() {
   useEffect(() => {
     let cred;
     if (token && status === "authenticated") {
-      cred = JSON.parse(token);
-      cred = jwt_decode(cred.credentials);
+      cred = jwt_decode(token.credentials);
       setUser(cred);
     }
   }, [token]);
@@ -74,19 +73,11 @@ export default function Home() {
               </Link>
               {event.template.length > 0 ? (
                 <>
-                  <Link
-                    href="/register/compose"
-                    className="p-2 px-4 rounded-xl border-2 border-accent hover:bg-accent hover:text-accent-content transition-all duration-300 font-bold">
-                    Edit Registration Page
-                  </Link>
+                  <h2>You have already created an event</h2>
                 </>
               ) : (
                 <>
-                  <Link
-                    href="/register/compose"
-                    className="p-2 px-4 rounded-xl border-2 border-accent hover:bg-accent hover:text-accent-content transition-all duration-300 font-bold">
-                    Create Registration Page
-                  </Link>
+                  <h2>You have already created an registration form</h2>
                 </>
               )}
             </>
