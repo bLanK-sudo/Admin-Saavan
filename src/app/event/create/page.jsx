@@ -172,8 +172,7 @@ const JudgesRow = ({ title, setValue, ...props }) => {
 };
 
 export default function CreateEvent() {
-  
-  const {token} = useAuth()
+  const { token, status } = useAuth();
 
   const emptyDummyObj = {
     name: "",
@@ -218,65 +217,71 @@ export default function CreateEvent() {
   const [eventDetails, setEventDetails] = useState({ ...emptyEventDetailsObj });
   const [judges, setJudges] = useState([{ ...emptyJudgeObj }]);
   const [teammates, setTeammates] = useState([{ ...emptyTeammateObj }]);
-  const [headerImg, setHeaderImg] = useState('')
+  const [headerImg, setHeaderImg] = useState("");
 
   const setDriveLink = (l, s) => {
-    const id = l.split('/')[5]
-    const nl = `https://drive.google.com/uc?id=${id}&export=download`
-    s(nl)
-  }
+    const id = l.split("/")[5];
+    const nl = `https://drive.google.com/uc?id=${id}&export=download`;
+    s(nl);
+  };
 
-  const getInformativeLinkFromKey = (key) => infol.filter(({ name }) => name == key)[0]?.value ?? "";
+  const getInformativeLinkFromKey = (key) =>
+    infol.filter(({ name }) => name == key)[0]?.value ?? "";
 
   const getPayload = () => ({
-      name: eventDetails.name,
-      description: value,
-      location: eventDetails.location,
-      max_participants: eventDetails.maxParticipants,
-      is_team_event: eval(eventDetails.isTeamEvent),
-      header_image: headerImg,
-      meet_link: getInformativeLinkFromKey("meet"),
-      fb_link: getInformativeLinkFromKey("facebook"),
-      ig_link: getInformativeLinkFromKey("instagram"),
-      yt_link: getInformativeLinkFromKey("youtube"),
-      twitter_link: getInformativeLinkFromKey("twitter"),
-      website_links: getInformativeLinkFromKey("website"),
-      misc_links: getInformativeLinkFromKey("misc"),
-      registration_start_date: (new Date(eventDetails.registrationStartDate)).toISOString(),
-      registration_end_date: (new Date(eventDetails.registrationEndDate)).toISOString(),
-      date: (new Date(eventDetails.eventDate)).toISOString(),
-      category: categoriesMap[eventDetails.category],
-      team: [...teammates],
-      judges: [...judges],
-      sponsors: [...sponsors],
-      // "mentors": [
-      //   {
-      //     "name": "",
-      //     "email": "",
-      //     "bio": "",
-      //     "image": ""
-      //   }
-      // ],
-      // "speakers": [
-      //   {
-      //     "name": "",
-      //     "email": "",
-      //     "bio": "",
-      //     "image": ""
-      //   }
-      // ],
-      // "pictures": [
-      //   {
-      //     "image": ""
-      //   }
-      // ],
-  })
+    name: eventDetails.name,
+    description: value,
+    location: eventDetails.location,
+    max_participants: eventDetails.maxParticipants,
+    is_team_event: eval(eventDetails.isTeamEvent),
+    header_image: headerImg,
+    meet_link: getInformativeLinkFromKey("meet"),
+    fb_link: getInformativeLinkFromKey("facebook"),
+    ig_link: getInformativeLinkFromKey("instagram"),
+    yt_link: getInformativeLinkFromKey("youtube"),
+    twitter_link: getInformativeLinkFromKey("twitter"),
+    website_links: getInformativeLinkFromKey("website"),
+    misc_links: getInformativeLinkFromKey("misc"),
+    registration_start_date: new Date(
+      eventDetails.registrationStartDate
+    ).toISOString(),
+    registration_end_date: new Date(
+      eventDetails.registrationEndDate
+    ).toISOString(),
+    date: new Date(eventDetails.eventDate).toISOString(),
+    category: categoriesMap[eventDetails.category],
+    team: [...teammates],
+    judges: [...judges],
+    sponsors: [...sponsors],
+    // "mentors": [
+    //   {
+    //     "name": "",
+    //     "email": "",
+    //     "bio": "",
+    //     "image": ""
+    //   }
+    // ],
+    // "speakers": [
+    //   {
+    //     "name": "",
+    //     "email": "",
+    //     "bio": "",
+    //     "image": ""
+    //   }
+    // ],
+    // "pictures": [
+    //   {
+    //     "image": ""
+    //   }
+    // ],
+  });
 
   const submitData = (e) => {
-    const payload = getPayload()
+    const payload = getPayload();
     console.log(JSON.stringify(payload));
-    const accessToken = token.access_token
-    axios.post(
+    const accessToken = token.access_token;
+    axios
+      .post(
         "events/create-event/",
         { ...payload },
         { headers: { Authorization: `Bearer ${accessToken}` } }
@@ -287,7 +292,7 @@ export default function CreateEvent() {
       .catch((err) => {
         if (err.response) {
           console.log(err.response);
-          alert(err.response.data.message)
+          alert(err.response.data.message);
         }
       });
   };
@@ -338,7 +343,7 @@ export default function CreateEvent() {
     registration_end_date,
     date,
     ...p
-  } = getPayload()
+  } = getPayload();
 
   const links = {
     facebook: fb_link,
@@ -348,12 +353,33 @@ export default function CreateEvent() {
     misc: misc_links,
     meet: meet_link,
     youtube: yt_link,
-  }
+  };
   const dates = {
     event_start_date: date,
-    event_end_date: '',
+    event_end_date: "",
     registration_start_date,
     registration_end_date,
+  };
+
+  if (status === "loading") {
+    return (
+      <>
+        <main className="fixed w-screen h-screen inset-0 bg-black bg-opacity-50 flex justify-center items-center">
+          <div className="w-32 h-32 bg-white rounded-full" />
+        </main>
+      </>
+    );
+  }
+
+  if (status === "unauthenticated") {
+    return (
+      <>
+        <div className="flex flex-col gap-2 justify-center items-center min-h-[70vh]">
+          <h1 className="text-4xl font-bold">Unauthenticated</h1>
+          <p>You are not logged in</p>
+        </div>
+      </>
+    );
   }
 
   return (
@@ -473,7 +499,7 @@ export default function CreateEvent() {
                 type="date"
                 className="outline-none p-4 bg-primary text-primary-content w-full"
                 placeholder="Event Time"
-                value={moment(eventDetails.eventDate).format('yyyy-MM-D')}
+                value={moment(eventDetails.eventDate).format("yyyy-MM-D")}
                 onChange={(e) =>
                   updateObjValue(e, eventDetails, "eventDate", setEventDetails)
                 }
@@ -488,7 +514,9 @@ export default function CreateEvent() {
                 type="date"
                 className="outline-none p-4 bg-primary text-primary-content w-full"
                 placeholder="Event Time"
-                value={moment(eventDetails.registrationStartDate).format('yyyy-MM-D')}
+                value={moment(eventDetails.registrationStartDate).format(
+                  "yyyy-MM-D"
+                )}
                 onChange={(e) =>
                   updateObjValue(
                     e,
@@ -507,7 +535,9 @@ export default function CreateEvent() {
                 type="date"
                 className="outline-none p-4 bg-primary text-primary-content w-full"
                 placeholder="Event Time"
-                value={moment(eventDetails.registrationEndDate).format('yyyy-MM-D')}
+                value={moment(eventDetails.registrationEndDate).format(
+                  "yyyy-MM-D"
+                )}
                 onChange={(e) =>
                   updateObjValue(
                     e,
@@ -525,9 +555,7 @@ export default function CreateEvent() {
           <div className=" flex flex-col border-2 items-center border-secondary h-full">
             <div className="flex flex-col w-full justify-start items-center p-1">
               <label className="w-full flex flex-wrap justify-between items-center bg-primary text-primary-content border-2 border-secondary">
-                <div className="p-4 font-extrabold uppercase">
-                  Team mates
-                </div>
+                <div className="p-4 font-extrabold uppercase">Team mates</div>
                 <div className="lg:h-full grid grid-cols-1 lg:grid-cols-2 justify-center items-center">
                   <button
                     onClick={addTeammate}

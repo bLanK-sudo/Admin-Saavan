@@ -6,6 +6,7 @@ import Team from "@/components/CreateEvent/Team";
 import { motion, AnimatePresence } from "framer-motion";
 import { useAuth } from "@/context/AuthContext";
 import { useEvent } from "@/context/EventContext";
+import Link from "next/link";
 
 export default function Compose() {
   const [checkedUser, setCheckedUser] = useState(false);
@@ -74,7 +75,7 @@ export default function Compose() {
                 checkedUser ? "bg-green-800 text-white" : ""
               } mb-1 flex font-bold justify-center items-center border-2 border-secondary h-12 cursor-pointer`}>
               <span className="z-[0] px-4">
-                {checkedUser ? "Selected" : "Select"} User Template
+                {checkedUser ? "Selected" : "Select"} Solo Template
               </span>
             </label>
           </div>
