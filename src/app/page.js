@@ -16,6 +16,7 @@ export default function Home() {
   useEffect(() => {
     let cred;
     if (token && status === "authenticated") {
+      console.log(token);
       cred = jwt_decode(token.credentials);
       setUser(cred);
     }
@@ -64,37 +65,19 @@ export default function Home() {
           </div>
         </div>
         <div className="flex gap-4 justify-center items-center">
-          {event ? (
-            <>
-              <Link
-                href="/event/create"
-                className="p-2 px-4 rounded-xl border-2 border-accent hover:bg-accent hover:text-accent-content transition-all duration-300 font-bold">
-                Edit {event.name} page
-              </Link>
-              {event.template.length > 0 ? (
-                <>
-                  <h2>You have already created an event</h2>
-                </>
-              ) : (
-                <>
-                  <h2>You have already created an registration form</h2>
-                </>
-              )}
-            </>
-          ) : (
-            <>
-              <Link
-                href="/event/create"
-                className="p-2 px-4 rounded-xl border-2 border-accent hover:bg-accent hover:text-accent-content transition-all duration-300 font-bold">
-                Create event page
-              </Link>
-              <Link
-                href="/register/compose"
-                className="p-2 px-4 rounded-xl border-2 border-accent hover:bg-accent hover:text-accent-content transition-all duration-300 font-bold">
-                Create Registration Page
-              </Link>
-            </>
-          )}
+          <>
+            <Link
+              href="/event/create"
+              className="p-2 px-4 rounded-xl border-2 border-accent hover:bg-accent hover:text-accent-content transition-all duration-300 font-bold">
+              Create event page
+            </Link>
+            <Link
+              aria-disabled
+              href="/register/compose"
+              className="p-2 px-4 rounded-xl border-2 border-accent hover:bg-accent hover:text-accent-content transition-all duration-300 font-bold">
+              Create Registration Page
+            </Link>
+          </>
         </div>
       </main>
     );

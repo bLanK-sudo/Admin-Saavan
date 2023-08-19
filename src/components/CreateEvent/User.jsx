@@ -13,7 +13,6 @@ export default function User() {
   const [success, setSuccess] = useState(false);
   const [userOptionsModal, setUserOptionsModal] = useState(false);
   const { token } = useAuth();
-  const parsed_token = JSON.parse(token).access_token;
   const handleSave = async () => {
     console.log(userDetails);
     setLoading(true);
@@ -25,7 +24,7 @@ export default function User() {
           method: "PUT",
           headers: {
             "Content-Type": "application/json",
-            Authorization: "Bearer " + parsed_token,
+            Authorization: "Bearer " + token.access_token,
           },
           body: JSON.stringify({
             template: userDetails,
@@ -56,7 +55,7 @@ export default function User() {
           User Details
         </div>
         <div className=" flex flex-col w-full ">
-          <motion className="m-1 flex gap-2 flex-col">
+          <div className="m-1 flex gap-2 flex-col">
             <div className=" flex flex-col border-2 items-center border-secondary">
               <input
                 id="name"
@@ -91,7 +90,7 @@ export default function User() {
                 />
               );
             })}
-          </motion>
+          </div>
           <div
             onClick={() => {
               setModal(true);

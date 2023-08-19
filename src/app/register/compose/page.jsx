@@ -11,13 +11,6 @@ export default function Compose() {
   const [checkedTeam, setCheckedTeam] = useState(false);
   const { status } = useAuth();
   const [event, setEvent] = useState(null);
-  useEffect(() => {
-    if (typeof window !== "undefined" && !event) {
-      if (localStorage.getItem("event")) {
-        setEvent(JSON.parse(localStorage.getItem("event")));
-      }
-    }
-  });
 
   if (status === "loading") {
     return (
@@ -34,6 +27,16 @@ export default function Compose() {
         <div className="flex flex-col gap-2 justify-center items-center min-h-[70vh]">
           <h1 className="text-4xl font-bold">Unauthenticated</h1>
           <p>You are not logged in</p>
+        </div>
+      </>
+    );
+  }
+  if (!event) {
+    return (
+      <>
+        <div className="flex flex-col gap-2 justify-center items-center min-h-[70vh]">
+          <h1 className="text-4xl font-bold">No Event Selected</h1>
+          <p>Please create an event</p>
         </div>
       </>
     );

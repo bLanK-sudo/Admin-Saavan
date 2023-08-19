@@ -1,6 +1,7 @@
 "use client";
 import { useState } from "react";
 import { useAuth } from "@context/AuthContext";
+import { useEvent } from "@context/EventContext";
 import { GoogleLogin } from "@react-oauth/google";
 import { useRouter } from "next/navigation";
 export default function Login() {
@@ -69,7 +70,7 @@ export default function Login() {
 
               if (data) {
                 localStorage.setItem("token", JSON.stringify(token));
-                setToken(JSON.stringify(token));
+                setToken(token);
                 setStatus("authenticated");
               }
               router.push("/");

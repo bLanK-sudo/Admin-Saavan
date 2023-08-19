@@ -3,11 +3,50 @@
 import { useEffect, useRef, useState } from "react";
 import TeamDetailsDiv from "./TeamDetailsDiv";
 import TeamModal from "./TeamModal";
-
+import { useAuth } from "@/context/AuthContext";
+import { useEvent } from "@/context/EventContext";
 export default function Team() {
   const [fields, setFields] = useState([]);
   const [teamDetails, setTeamDetails] = useState({ members: 1, fields: [] });
   const [teamModal, setTeamModal] = useState(false);
+  const { token } = useAuth();
+  const { event } = useEvent();
+  const handleSave = async () => {
+    console.log(userDetails);
+    setLoading(true);
+    if (event && token) {
+      try {
+        console.log("sending fetch");
+        const response = await fetch(
+          "https://saavan23dev.onrender.com/events/set-template/" +
+            event.id +
+            "/",
+          {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: "Bearer " + token.access_token,
+            },
+            body: JSON.stringify({
+              template: teamDetails,
+            }),
+          }
+        );
+
+        const data = await response.json();
+        if (response.status === 200) {
+          setSuccess(true);
+          setTimeout(() => {
+            setSuccess(false);
+          }, 4500);
+        }
+        setLoading(false);
+        console.log(data);
+      } catch (err) {
+        console.log(err);
+      }
+    }
+  };
   useEffect(() => {
     teamDetails.fields = fields;
     setTeamDetails(teamDetails);
@@ -64,7 +103,7 @@ export default function Team() {
       )}
       <div
         onClick={() => {
-          console.log(teamDetails);
+          handleSave();
         }}
         className="hover:bg-accent transition-all duration-300 hover:text-accent-content border-2 border-secondary cursor-pointer font-bold text-xl m-4 flex justify-center items-center p-4">
         <span className="z-[0]">Save Template</span>
