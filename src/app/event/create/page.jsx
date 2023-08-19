@@ -275,7 +275,7 @@ export default function CreateEvent() {
   const submitData = (e) => {
     const payload = getPayload()
     console.log(JSON.stringify(payload));
-    const accessToken = token.accessToken
+    const accessToken = token.access_token
     axios.post(
         "events/create-event/",
         { ...payload },
