@@ -17,7 +17,7 @@ $p_fs: 16px;
     max-width: 1200px;
     margin: 0 auto;
 
-    a {
+    a:not(.btn) {
         text-decoration: underline;
     }
 
