@@ -1,7 +1,6 @@
 "use client";
 import { useState } from "react";
 import { useAuth } from "@context/AuthContext";
-import { useEvent } from "@/context/EventContext";
 import { GoogleLogin } from "@react-oauth/google";
 import { useRouter } from "next/navigation";
 import { useEvent } from "@/context/EventContext";

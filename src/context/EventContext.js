@@ -1,4 +1,4 @@
-import { createContext, useState, useEffect } from "react";
+import { createContext, useState, useEffect, useContext } from "react";
 
 export const EventContext = createContext();
 
@@ -32,3 +32,5 @@ const EventProvider = ({ children }) => {
     <EventContext.Provider value={value}>{children}</EventContext.Provider>
   );
 };
+
+export default EventProvider;

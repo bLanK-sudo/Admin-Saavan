@@ -23,7 +23,6 @@ const AuthProvider = ({ children }) => {
           if (parsed.time < new Date().getTime()) {
             localStorage.removeItem("token");
             setStatus("unauthenticated");
-            getUser();
           } else {
             setToken(localStorage.getItem("token"));
             setStatus("authenticated");
