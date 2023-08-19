@@ -1,10 +1,13 @@
 "use client";
 import { useState } from "react";
 import { useAuth } from "@context/AuthContext";
+import { useEvent } from "@/context/EventContext";
 import { GoogleLogin } from "@react-oauth/google";
 import { useRouter } from "next/navigation";
+import { useEvent } from "@/context/EventContext";
 export default function Login() {
   const { setToken, setStatus } = useAuth();
+  const { event, setEvent } = useEvent();
   const router = useRouter();
   const [loading, setLoading] = useState(false);
 
@@ -59,20 +62,17 @@ export default function Login() {
                 if (event.status === 200) {
                   console.log(event_data.name);
                   console.log(event_data.id);
-                  const data = {
-                    name: event_data.name,
-                    id: event_data.id,
-                  };
                   localStorage.setItem("event", JSON.stringify(event_data));
+                  setEvent(event_data);
                 }
               } catch (err) {
                 console.log(err);
               }
-              setToken(JSON.stringify(token));
-              setStatus("authenticated");
 
               if (data) {
                 localStorage.setItem("token", JSON.stringify(token));
+                setToken(JSON.stringify(token));
+                setStatus("authenticated");
               }
               router.push("/");
               //setLoading(false);

@@ -2,14 +2,16 @@
 
 import Link from "next/link";
 import { useAuth } from "@/context/AuthContext";
+import { useEvent } from "@/context/EventContext";
 export default function Navigation() {
   const { token, status, setToken, setStatus } = useAuth();
-
+  const { setEvent } = useEvent();
   const handleLogout = () => {
     if (localStorage) {
       localStorage.removeItem("token");
       localStorage.removeItem("event");
     }
+    setEvent(null);
     setToken(null);
     setStatus("unauthenticated");
   };
