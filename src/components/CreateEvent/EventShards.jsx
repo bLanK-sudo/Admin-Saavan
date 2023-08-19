@@ -19,7 +19,7 @@ const Anchor = ({children, ...props}) => {
     )
 }
 
-const Title = ({title, sponsors, dates, links, venue, category, ...props}) => {
+const Title = ({title, sponsors, dates, links, venue, category, registration_link='#', ...props}) => {
 
     const SponsorItem = ({name, logo, website, type, ...props}) => {
         return (
@@ -55,13 +55,16 @@ const Title = ({title, sponsors, dates, links, venue, category, ...props}) => {
             misc: ((u) => <IconLinkRow link={u}><FaPaperclip /></IconLinkRow>),
         }[k](url)
     }
+
     return (
     <div className="title-wrapper">
         <div className="title-container">
             <h1 className="title">{title}</h1>
             {/* <div className="sub-title">{subtitle}</div> */}
             <div className='py-3'>
+
                 <span className="bg-indigo-100 text-indigo-800 text-xs font-medium mr-2 px-2.5 py-1 rounded-full dark:bg-indigo-900 dark:text-indigo-300">{categoriesMap[category]}</span>
+                
                 <div className="md:flex justify-between block">
                     <div className="left">
                         <div className='flex items-center mb-3 mt-3'>
@@ -85,7 +88,10 @@ const Title = ({title, sponsors, dates, links, venue, category, ...props}) => {
                         {Object.keys(links).map((k, ind) => links[k] ? <LinkMaps k={k} key={`link_${ind}`} url={links[k]} />:'')}
                     </div>
                 </div>
-                <div className="flex items-center justify-center flex-wrap">
+
+                <a className="btn text-blue-700 hover:text-white border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg px-5 py-2.5 text-center mr-2 mb-2 dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-500 dark:focus:ring-blue-800 no-underline mt-3 inline-block" href={registration_link}>Register</a>
+
+                <div className="flex items-center justify-start flex-wrap">
                     {sponsors.map((item, ind) => <SponsorItem key={`sponsor_${ind}`} {...item} />)}
                 </div>
             </div>

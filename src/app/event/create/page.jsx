@@ -674,11 +674,13 @@ export default function CreateEvent() {
           data={value}
           {...p}
         />
-        <button
-          className="p-2 px-4 bg-green-500 border border-black uppercase"
-          onClick={submitData}>
-          Create event
-        </button>
+        <div className="p-5 border-t-4 border-black text-center">
+          <button
+            className="p-2 px-4 bg-green-500 border border-black uppercase"
+            onClick={submitData}>
+            Create event
+          </button>
+        </div>
       </div>
     </>
   );
