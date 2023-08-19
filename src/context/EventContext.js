@@ -16,15 +16,11 @@ export const EventProvider = ({ children }) => {
 
   useEffect(() => {
     if (!event) {
-      let flag = false;
       if (typeof window !== "undefined") {
         if (localStorage.getItem("event")) {
-          setEvent(JSON.parse(localStorage.getItem("event")));
-          flag = true;
+          const parsed = JSON.parse(localStorage.getItem("event"));
+          setEvent(parsed);
         }
-      }
-      if (!flag) {
-        setEvent(null);
       }
     }
   });

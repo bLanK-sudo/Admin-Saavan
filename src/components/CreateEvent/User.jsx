@@ -6,6 +6,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import UserOptionsModal from "./UserOptionsModal";
 import { useAuth } from "@/context/AuthContext";
 import UserModal from "./UserModal";
+import { useEvent } from "@/context/EventContext";
 export default function User() {
   const [userDetails, setUserDetails] = useState([]);
   const [modal, setModal] = useState(false);
@@ -13,6 +14,16 @@ export default function User() {
   const [success, setSuccess] = useState(false);
   const [userOptionsModal, setUserOptionsModal] = useState(false);
   const { token } = useAuth();
+  const { event, setEvent } = useEvent();
+  useEffect(() => {
+    if (event) {
+      if (!event.is_team_event) {
+        if (event.template) {
+          setUserDetails(JSON.parse(event.template));
+        }
+      }
+    }
+  }, [event]);
   const handleSave = async () => {
     console.log(userDetails);
     setLoading(true);
@@ -35,10 +46,13 @@ export default function User() {
       const data = await response.json();
       if (response.status === 200) {
         setSuccess(true);
+        event.template = userDetails;
+        setEvent(event);
         setTimeout(() => {
           setSuccess(false);
         }, 4500);
       }
+
       setLoading(false);
       console.log(data);
     } catch (err) {
@@ -155,7 +169,7 @@ export default function User() {
               transition={{ duration: 0.5, ease: "easeInOut" }}>
               <div className="w-screen fixed h-screen bg-black bg-opacity-40 inset-0 flex justify-center items-center">
                 <h1 className="p-4 bg-secondary text-secondary-content rounded-xl w-[80%] md:w-1/2 text-center h-[20%] md:h-1/3 flex justify-center items-center">
-                  Please wait a few secs while we log you in...
+                  Template Saved!
                 </h1>
               </div>
             </motion.div>

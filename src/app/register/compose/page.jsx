@@ -5,13 +5,16 @@ import User from "@/components/CreateEvent/User";
 import Team from "@/components/CreateEvent/Team";
 import { motion, AnimatePresence } from "framer-motion";
 import { useAuth } from "@/context/AuthContext";
+import { useEvent } from "@/context/EventContext";
 
 export default function Compose() {
   const [checkedUser, setCheckedUser] = useState(false);
   const [checkedTeam, setCheckedTeam] = useState(false);
   const { status } = useAuth();
-  const [event, setEvent] = useState(null);
-
+  const { event } = useEvent();
+  useEffect(() => {
+    console.log(event);
+  }, [event]);
   if (status === "loading") {
     return (
       <>
