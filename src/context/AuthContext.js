@@ -24,7 +24,7 @@ const AuthProvider = ({ children }) => {
             localStorage.removeItem("token");
             setStatus("unauthenticated");
           } else {
-            setToken(localStorage.getItem("token"));
+            setToken(parsed);
             setStatus("authenticated");
             flag = true;
           }
