@@ -5,10 +5,11 @@
 import EventPageTemplate from "@/components/CreateEvent/EventPageTemplate.jsx";
 import { useEffect, useState } from "react";
 import axios from '@/components/axios'
+import { useEvent } from "@/context/EventContext";
 
 export default function CreateEvent() {
-
-  const [resData, setResData] = useState({})
+  const {event} = useEvent()
+  // const [resData, setResData] = useState({})
   const {
     location,
     meet_link,
@@ -24,7 +25,9 @@ export default function CreateEvent() {
     category,
     name,
     description,
-  } = resData
+  } = event ?? {}
+
+  console.log(event);
 
   const links = {
     facebook: fb_link,
@@ -42,14 +45,14 @@ export default function CreateEvent() {
     registration_end_date,
   }
 
-  useEffect(() => {
-    // axios.get('event')
-    // .then((res) => setResData(...res.data))
-    // .catch((err) => {
-    //   if(err.response) console.log(err)
-    // })
-  }, [])
-
+  // useEffect(() => {
+  //   // axios.get('event')
+  //   // .then((res) => setResData(...res.data))
+  //   // .catch((err) => {
+  //   //   if(err.response) console.log(err)
+  //   // })
+  // }, [])
+  if (event)
   return (
     <>
       <EventPageTemplate
