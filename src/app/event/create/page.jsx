@@ -499,7 +499,7 @@ export default function CreateEvent() {
                 type="date"
                 className="outline-none p-4 bg-primary text-primary-content w-full"
                 placeholder="Event Time"
-                value={moment(eventDetails.eventDate).format("yyyy-MM-D")}
+                value={moment(eventDetails.eventDate).format("yyyy-MM-DD")}
                 onChange={(e) =>
                   updateObjValue(e, eventDetails, "eventDate", setEventDetails)
                 }
@@ -515,7 +515,7 @@ export default function CreateEvent() {
                 className="outline-none p-4 bg-primary text-primary-content w-full"
                 placeholder="Event Time"
                 value={moment(eventDetails.registrationStartDate).format(
-                  "yyyy-MM-D"
+                  "yyyy-MM-DD"
                 )}
                 onChange={(e) =>
                   updateObjValue(
@@ -536,7 +536,7 @@ export default function CreateEvent() {
                 className="outline-none p-4 bg-primary text-primary-content w-full"
                 placeholder="Event Time"
                 value={moment(eventDetails.registrationEndDate).format(
-                  "yyyy-MM-D"
+                  "yyyy-MM-DD"
                 )}
                 onChange={(e) =>
                   updateObjValue(
