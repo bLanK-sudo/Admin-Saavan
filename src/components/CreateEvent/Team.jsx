@@ -19,46 +19,48 @@ export default function Team() {
     if (event) {
       if (event.is_team_event) {
         if (event.template) {
-          setTeamDetails(JSON.parse(event.template));
+          setTeamDetails(event.template);
         }
       }
     }
   }, [event]);
 
   const handleSave = async () => {
-    setLoading(true);
     if (event && token) {
-      try {
-        console.log("sending fetch");
-        const response = await fetch(
-          "https://saavan23dev.onrender.com/events/set-template/" +
-            event.id +
-            "/",
-          {
-            method: "PUT",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: "Bearer " + token.access_token,
-            },
-            body: JSON.stringify({
-              template: teamDetails,
-            }),
-          }
-        );
+      if (event.is_team_event) {
+        setLoading(true);
+        try {
+          console.log("sending fetch");
+          console.log(teamDetails);
+          const response = await fetch(
+            "https://saavan23dev.onrender.com/events/set-template/" +
+              event.id +
+              "/",
+            {
+              method: "PUT",
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: "Bearer " + token.access_token,
+              },
+              body: JSON.stringify({
+                template: teamDetails,
+              }),
+            }
+          );
 
-        const data = await response.json();
-        if (response.status === 200) {
-          event.template = teamDetails;
-          setEvent(event);
-          setSuccess(true);
-          setTimeout(() => {
-            setSuccess(false);
-          }, 4500);
+          const data = await response.json();
+          if (response.status === 200) {
+            event.template = teamDetails;
+            setEvent(event);
+            setSuccess(true);
+            setTimeout(() => {
+              setSuccess(false);
+            }, 4500);
+          }
+          setLoading(false);
+        } catch (err) {
+          console.log(err);
         }
-        setLoading(false);
-        console.log(data);
-      } catch (err) {
-        console.log(err);
       }
     }
   };

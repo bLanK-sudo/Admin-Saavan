@@ -19,7 +19,6 @@ const AuthProvider = ({ children }) => {
       if (typeof window !== "undefined") {
         if (localStorage.getItem("token")) {
           const parsed = JSON.parse(localStorage.getItem("token"));
-          console.log(parsed.time < new Date().getTime());
           if (parsed.time < new Date().getTime()) {
             localStorage.removeItem("token");
             setStatus("unauthenticated");

@@ -25,43 +25,44 @@ export default function User() {
     }
   }, [event]);
   const handleSave = async () => {
-    console.log(userDetails);
-    setLoading(true);
-    try {
-      console.log("sending fetch");
-      const response = await fetch(
-        "https://saavan23dev.onrender.com/events/set-template/4/",
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: "Bearer " + token.access_token,
-          },
-          body: JSON.stringify({
-            template: userDetails,
-          }),
+    if (!event.is_team_event) {
+      setLoading(true);
+      try {
+        console.log("sending fetch");
+        const response = await fetch(
+          "https://saavan23dev.onrender.com/events/set-template/" +
+            event.id +
+            "/",
+          {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: "Bearer " + token.access_token,
+            },
+            body: JSON.stringify({
+              template: userDetails,
+            }),
+          }
+        );
+
+        const data = await response.json();
+        if (response.status === 200) {
+          setSuccess(true);
+          event.template = userDetails;
+          setEvent(event);
+          setTimeout(() => {
+            setSuccess(false);
+          }, 4500);
         }
-      );
 
-      const data = await response.json();
-      if (response.status === 200) {
-        setSuccess(true);
-        event.template = userDetails;
-        setEvent(event);
-        setTimeout(() => {
-          setSuccess(false);
-        }, 4500);
+        setLoading(false);
+      } catch (err) {
+        console.log(err);
       }
-
-      setLoading(false);
-      console.log(data);
-    } catch (err) {
-      console.log(err);
+    } else {
+      console.log("Your event is a team event");
     }
   };
-  useEffect(() => {
-    console.log(userDetails);
-  }, [userDetails]);
   return (
     <>
       <div className="grid grid-cols-1 lg:grid-cols-2 border-2 border-secondary m-4">

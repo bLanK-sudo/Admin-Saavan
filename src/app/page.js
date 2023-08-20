@@ -16,7 +16,6 @@ export default function Home() {
   useEffect(() => {
     let cred;
     if (token && status === "authenticated") {
-      console.log(token);
       cred = jwt_decode(token.credentials);
       setUser(cred);
     }

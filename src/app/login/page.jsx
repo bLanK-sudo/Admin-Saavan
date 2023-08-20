@@ -18,7 +18,6 @@ export default function Login() {
         clientId={process.env.GOOGLE_CLIENT_ID}
         redirectUri={process.env.GOOGLE_REDIRECT_URI}
         onSuccess={async (res) => {
-          console.log(res);
           setLoading(true);
           try {
             const response = await fetch(
@@ -40,7 +39,6 @@ export default function Login() {
             );
             const data = await response.json();
             if (response.status === 200) {
-              console.log(data);
               const token = {
                 access_token: data.access_token,
                 credentials: res.credential,
@@ -59,8 +57,6 @@ export default function Login() {
                 );
                 const event_data = await event.json();
                 if (event.status === 200) {
-                  console.log(event_data.name);
-                  console.log(event_data.id);
                   localStorage.setItem("event", JSON.stringify(event_data));
                   setEvent(event_data);
                 }
@@ -82,7 +78,7 @@ export default function Login() {
           } catch (err) {
             // setLoading(false);
             console.log(err);
-            setToast("Something went wrong");
+            console.log("Something went wrong");
           }
         }}
         onFailure={(res) => console.log(res)}></GoogleLogin>

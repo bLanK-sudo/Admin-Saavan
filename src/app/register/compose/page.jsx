@@ -13,9 +13,6 @@ export default function Compose() {
   const [checkedTeam, setCheckedTeam] = useState(false);
   const { status } = useAuth();
   const { event } = useEvent();
-  useEffect(() => {
-    console.log(event);
-  }, [event]);
   if (status === "loading") {
     return (
       <>

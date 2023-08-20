@@ -23,6 +23,8 @@ import { AnimatePresence, motion } from "framer-motion";
 import { useAuth } from "@/context/AuthContext";
 import { categoriesMap } from "@/components/constants";
 import moment from "moment";
+import { useRouter } from "next/navigation";
+import { useEvent } from "@/context/EventContext";
 
 const InformativeLink = ({ name, value, setName, setValue }) => {
   return (
@@ -174,7 +176,8 @@ const JudgesRow = ({ title, setValue, ...props }) => {
 
 export default function CreateEvent() {
   const { token, status } = useAuth();
-
+  const { setEvent } = useEvent();
+  const router = useRouter();
   const emptyDummyObj = {
     name: "",
     value: "",
@@ -281,7 +284,6 @@ export default function CreateEvent() {
 
   const submitData = (e) => {
     const payload = getPayload();
-    console.log(JSON.stringify(payload));
     const accessToken = token.access_token;
     setLoading(true);
     axios
@@ -290,10 +292,35 @@ export default function CreateEvent() {
         { ...payload },
         { headers: { Authorization: `Bearer ${accessToken}` } }
       )
-      .then((res) => {
-        console.log(res);
+      .then(async (res) => {
         setLoading(false);
         setSuccess(true);
+        try {
+          const event = await fetch(
+            "https://saavan23dev.onrender.com/organizers/event/",
+            {
+              method: "GET",
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: "Bearer " + token.access_token,
+              },
+            }
+          );
+          const event_data = await event.json();
+          if (event.status === 200) {
+            localStorage.setItem("event", JSON.stringify(event_data));
+            setEvent(event_data);
+          }
+        } catch (err) {
+          setLoading(false);
+          alert("Error getting event");
+          router.push("/");
+          console.log(err);
+        }
+        setTimeout(() => {
+          setSuccess(false);
+          router.push("/");
+        }, 2500);
       })
       .catch((err) => {
         if (err.response) {
@@ -726,7 +753,7 @@ export default function CreateEvent() {
               transition={{ duration: 0.5, ease: "easeInOut" }}>
               <div className="w-screen fixed h-screen bg-black bg-opacity-40 inset-0 flex justify-center items-center">
                 <h1 className="p-4 bg-secondary text-secondary-content rounded-xl w-[80%] md:w-1/2 text-center h-[20%] md:h-1/3 flex justify-center items-center">
-                  We are creating the registration page for you...
+                  We are creating the event page for you...
                 </h1>
               </div>
             </motion.div>
@@ -743,7 +770,7 @@ export default function CreateEvent() {
               transition={{ duration: 0.5, ease: "easeInOut" }}>
               <div className="w-screen fixed h-screen bg-black bg-opacity-40 inset-0 flex justify-center items-center">
                 <h1 className="p-4 bg-secondary text-secondary-content rounded-xl w-[80%] md:w-1/2 text-center h-[20%] md:h-1/3 flex justify-center items-center">
-                  Template Saved!
+                  Event Page Created!!
                 </h1>
               </div>
             </motion.div>
