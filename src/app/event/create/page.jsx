@@ -19,6 +19,7 @@ import MDEditor, {
 import rehypeSanitize from "rehype-sanitize";
 import EventPageTemplate from "@/components/CreateEvent/EventPageTemplate.jsx";
 import axios from "@/components/axios";
+import { AnimatePresence } from "framer-motion";
 import { useAuth } from "@/context/AuthContext";
 import { categoriesMap } from "@/components/constants";
 import moment from "moment";
@@ -218,6 +219,8 @@ export default function CreateEvent() {
   const [judges, setJudges] = useState([{ ...emptyJudgeObj }]);
   const [teammates, setTeammates] = useState([{ ...emptyTeammateObj }]);
   const [headerImg, setHeaderImg] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [success, setSuccess] = useState(false);
 
   const setDriveLink = (l, s) => {
     const id = l.split("/")[5];
@@ -280,6 +283,7 @@ export default function CreateEvent() {
     const payload = getPayload();
     console.log(JSON.stringify(payload));
     const accessToken = token.access_token;
+    setLoading(true);
     axios
       .post(
         "events/create-event/",
@@ -288,9 +292,12 @@ export default function CreateEvent() {
       )
       .then((res) => {
         console.log(res);
+        setLoading(false);
+        setSuccess(true);
       })
       .catch((err) => {
         if (err.response) {
+          setLoading(false);
           console.log(err.response);
           alert(err.response.data.message);
         }
@@ -710,6 +717,39 @@ export default function CreateEvent() {
           </button>
         </div>
       </div>
+      <AnimatePresence mode="wait">
+        {loading && (
+          <>
+            <motion.div
+              initial={{ opacity: 0, scale: 0.98 }}
+              animate={{ opacity: [0, 1], scale: [0.98, 1] }}
+              transition={{ duration: 0.5, ease: "easeInOut" }}>
+              <div className="w-screen fixed h-screen bg-black bg-opacity-40 inset-0 flex justify-center items-center">
+                <h1 className="p-4 bg-secondary text-secondary-content rounded-xl w-[80%] md:w-1/2 text-center h-[20%] md:h-1/3 flex justify-center items-center">
+                  We are creating the registration page for you...
+                </h1>
+              </div>
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
+
+      <AnimatePresence mode="wait">
+        {success && (
+          <>
+            <motion.div
+              initial={{ opacity: 0, scale: 0.98 }}
+              animate={{ opacity: [0, 1], scale: [0.98, 1] }}
+              transition={{ duration: 0.5, ease: "easeInOut" }}>
+              <div className="w-screen fixed h-screen bg-black bg-opacity-40 inset-0 flex justify-center items-center">
+                <h1 className="p-4 bg-secondary text-secondary-content rounded-xl w-[80%] md:w-1/2 text-center h-[20%] md:h-1/3 flex justify-center items-center">
+                  Template Saved!
+                </h1>
+              </div>
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
     </>
   );
 }
