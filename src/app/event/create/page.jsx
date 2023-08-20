@@ -19,7 +19,7 @@ import MDEditor, {
 import rehypeSanitize from "rehype-sanitize";
 import EventPageTemplate from "@/components/CreateEvent/EventPageTemplate.jsx";
 import axios from "@/components/axios";
-import { AnimatePresence } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import { useAuth } from "@/context/AuthContext";
 import { categoriesMap } from "@/components/constants";
 import moment from "moment";
