@@ -21,7 +21,7 @@ export default function Login() {
           setLoading(true);
           try {
             const response = await fetch(
-              "https://saavan23dev.onrender.com/auth/convert-token/",
+              process.env.PUBLIC_URL + "/auth/convert-token/",
               {
                 method: "POST",
                 headers: {
@@ -32,8 +32,7 @@ export default function Login() {
                   token: res.credential,
                   grant_type: "convert_token",
                   client_id: process.env.DJANGO_CLIENT_ID,
-                  client_secret:
-                    "Ui4d0m2ejOLTNhl3oYXq1VdTxlrqAvipuaV8AH4yJsvWHhcR1MjtjXwgd5xRy5KWyg9Hh3rZt6hYMfqrqE4H4B5EXIIYuuZy5C4fKl8fWASMb6eevPqQXVxkZcrg7VlN",
+                  client_secret: process.env.GOOGLE_CLIENT_SECRET,
                 }),
               }
             );
@@ -46,7 +45,7 @@ export default function Login() {
               };
               try {
                 const event = await fetch(
-                  "https://saavan23dev.onrender.com/organizers/event/",
+                  process.env.PUBLIC_URL + "/organizers/event/",
                   {
                     method: "GET",
                     headers: {

@@ -297,7 +297,7 @@ export default function CreateEvent() {
         setSuccess(true);
         try {
           const event = await fetch(
-            "https://saavan23dev.onrender.com/organizers/event/",
+            process.env.PUBLIC_URL + "/organizers/event/",
             {
               method: "GET",
               headers: {

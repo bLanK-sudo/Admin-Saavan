@@ -33,9 +33,7 @@ export default function Team() {
           console.log("sending fetch");
           console.log(teamDetails);
           const response = await fetch(
-            "https://saavan23dev.onrender.com/events/set-template/" +
-              event.id +
-              "/",
+            process.env.PUBLIC_URL + "/events/set-template/" + event.id + "/",
             {
               method: "PUT",
               headers: {
