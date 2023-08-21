@@ -340,11 +340,11 @@ export default function CreateEvent() {
   };
 
   const addJudge = (e) => {
-    setJudges([...judges, { ...emptyDummyObj }]);
+    setJudges([...judges, { ...emptyJudgeObj }]);
   };
 
   const addTeammate = (e) => {
-    if (teammates.length < 4)
+    if (teammates.length < 2)
       setTeammates([...teammates, { ...emptyTeammateObj }]);
   };
 
