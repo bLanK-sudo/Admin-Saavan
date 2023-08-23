@@ -63,7 +63,10 @@ const InformativeLink = ({ name, value, setName, setValue }) => {
           </option>
           <option value="website">Website</option>
           <option value="youtube">Youtube</option>
+          <option value="instagram">Instagram</option>
+          <option value="twitter">Twitter</option>
           <option value="meet">Google Meet</option>
+          <option value="misc">Miscellaneous</option>
         </select>
         <input
           type="url"
@@ -446,7 +449,7 @@ const InformativeLink = ({ name, value, setName, setValue }) => {
     return (
       <>
         <div className="w-full flex flex-col justify-center items-center">
-          <h1 className="text-4xl p-4 text-center">Create Event Page</h1>
+          <h1 className="text-4xl p-4 text-center">{editEvent ? 'Create' : 'Edit'} Event Page</h1>
           <div className="text-center max-w-[700px]">
             Complete all the mandatory fields given below.
           </div>
@@ -788,7 +791,7 @@ const InformativeLink = ({ name, value, setName, setValue }) => {
                 transition={{ duration: 0.5, ease: "easeInOut" }}>
                 <div className="w-screen fixed h-screen bg-black bg-opacity-40 inset-0 flex justify-center items-center">
                   <h1 className="p-4 bg-secondary text-secondary-content rounded-xl w-[80%] md:w-1/2 text-center h-[20%] md:h-1/3 flex justify-center items-center">
-                    We are creating the event page for you...
+                    We are {editEvent ? 'creating' : 'editing'} the event page for you...
                   </h1>
                 </div>
               </motion.div>
@@ -805,7 +808,7 @@ const InformativeLink = ({ name, value, setName, setValue }) => {
                 transition={{ duration: 0.5, ease: "easeInOut" }}>
                 <div className="w-screen fixed h-screen bg-black bg-opacity-40 inset-0 flex justify-center items-center">
                   <h1 className="p-4 bg-secondary text-secondary-content rounded-xl w-[80%] md:w-1/2 text-center h-[20%] md:h-1/3 flex justify-center items-center">
-                    Event Page Created!!
+                    Event Page {editEvent ? 'Created' : 'Edited'}!!
                   </h1>
                 </div>
               </motion.div>

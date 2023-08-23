@@ -26,7 +26,7 @@ $p_fs: 16px;
         width: 100%;
     
         .title {
-            font-size: $title2_fs;
+            font-size: $title3_fs;
             line-height: .95;
             margin: 0;
             font-weight: 800;
@@ -88,16 +88,45 @@ $p_fs: 16px;
                 margin-bottom: 4rem;
             }
     
-            h1 {
-                font-size: $h1_fs;
+            h1, h2, h3 {
                 font-weight: 700;
             }
+            
+            h4, h5, h6 {
+                font-weight: 600;
+            }
+
+            h1 {
+                font-size: $h1_fs;
+            }
+
+            h2 {
+                font-size: $h2_fs;
+            }
+            
+            h3 {
+                font-size: $h3_fs;
+            }
+            
+            h4 {
+                font-size: $h4_fs;
+            }
+            
+            h5 {
+                font-size: $h5_fs;
+            }
+            
+            h6 {
+                font-size: $h6_fs;
+            }
+
+
     
         }
     
         p {
             font-size: $p_fs;
-            text-transform: uppercase;
+            // text-transform: uppercase;
             padding: 0 3rem;
             text-align: left;
             // width: 70%;
@@ -117,8 +146,7 @@ $p_fs: 16px;
                 }
             }
         }
-    
-        
+
     }
 }
 
