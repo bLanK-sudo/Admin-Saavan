@@ -19,7 +19,7 @@ const Anchor = ({children, ...props}) => {
     )
 }
 
-const Title = ({title, sponsors, dates, links, venue, category, registration_link='#', ...props}) => {
+const Title = ({title, sponsors, dates, links, venue, category, registration_link='#', team, ...props}) => {
 
     const SponsorItem = ({name, logo, website, type, ...props}) => {
         return (
@@ -56,6 +56,21 @@ const Title = ({title, sponsors, dates, links, venue, category, registration_lin
         }[k](url)
     }
 
+    const TeamMate = ({name, email, role, phone}) => {
+        return (
+            <div className='team-card'>
+                <h6>{name}</h6>
+                <div className='email-wrapper'><a href={`mailto:${email}`}>{email}</a></div>
+                {/* <div className='phone-wrapper'><a href={`tel:${phone}`}>{phone}</a></div> */}
+                <div className="role-wrapper">
+                    <span class="bg-green-100 text-green-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-green-400 border border-green-400">
+                        {role}
+                    </span>
+                </div>
+            </div>
+        )
+    }
+
     return (
     <div className="title-wrapper">
         <div className="title-container">
@@ -83,13 +98,25 @@ const Title = ({title, sponsors, dates, links, venue, category, registration_lin
                                 {moment(dates.event_start_date).format('Do MMMM, YYYY')}
                             </span>
                         </div>
+
+                        <div className="register-btn-wrapper">
+                            <a className="btn text-blue-700 hover:text-white border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg px-5 py-2.5 text-center mr-2 mb-2 dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-500 dark:focus:ring-blue-800 no-underline mt-3 inline-block" href={registration_link}>Register</a>
+                        </div>
                     </div>
                     <div className="right">
-                        {Object.keys(links).map((k, ind) => links[k] ? <LinkMaps k={k} key={`link_${ind}`} url={links[k]} />:'')}
+                        <div className="links-wrapper">
+                        {Object.keys(links).map((k, ind) => links[k] ? 
+                            <LinkMaps k={k} key={`link_${ind}`} url={links[k]} />
+                        :
+                            ''
+                        )}
+                        </div>
+                        <div className="team-wrapper">
+                            <h5>Organizing Team</h5>
+                            {team.map((val, ind) => (<TeamMate key={val.email} {...val} />))}
+                        </div>
                     </div>
                 </div>
-
-                <a className="btn text-blue-700 hover:text-white border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg px-5 py-2.5 text-center mr-2 mb-2 dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-500 dark:focus:ring-blue-800 no-underline mt-3 inline-block" href={registration_link}>Register</a>
 
                 <div className="flex items-center justify-start flex-wrap">
                     {sponsors.map((item, ind) => <SponsorItem key={`sponsor_${ind}`} {...item} />)}

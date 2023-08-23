@@ -46,6 +46,32 @@ $p_fs: 16px;
             text-transform: uppercase;
             font-weight: 300;
         }
+
+    }
+    .team-wrapper {
+
+        h5 {
+            font-weight: 700;
+            text-decoration: underline;
+            font-size: $h6_fs;
+            margin-bottom: 1rem;
+        }
+
+        .team-card {
+            margin-bottom: .5rem;
+
+            h6 {
+                font-weight: 600;
+                margin-bottom: .5rem;
+            }
+
+            .email-wrapper {
+                font-size: .85rem;
+                margin-bottom: .5rem;
+            }
+
+        }
+
     }
     
     .scroll-btn-container {
@@ -73,6 +99,7 @@ $p_fs: 16px;
     .event-body-wrapper {
     
         width: 100%;
+        margin-bottom: 5rem;
         
         h1, h2, h3 {
             font-weight: 700;
@@ -82,36 +109,37 @@ $p_fs: 16px;
             
         h4, h5, h6 {
             font-weight: 600;
-            
         }
-        h1 {
-                font-size: $h1_fs;
-            }
 
-            h2 {
-                font-size: $h2_fs;
-                padding-left: 2.5rem;
-            }
-            
-            h3 {
-                font-size: $h3_fs;
-                padding-left: 3rem;
-            }
-            
-            h4 {
-                font-size: $h4_fs;
-                padding-left: 3.25rem;
-            }
-            
-            h5 {
-                font-size: $h5_fs;
-                padding-left: 3.6rem;
-            }
-            
-            h6 {
-                font-size: $h6_fs;
-                padding-left: 4rem;
-            }
+        h1 {
+            font-size: $h1_fs;
+        }
+
+        h2 {
+            font-size: $h2_fs;
+            padding-left: 2.5rem;
+        }
+        
+        h3 {
+            font-size: $h3_fs;
+            padding-left: 3rem;
+        }
+        
+        h4 {
+            font-size: $h4_fs;
+            padding-left: 3.25rem;
+        }
+        
+        h5 {
+            font-size: $h5_fs;
+            padding-left: 3.6rem;
+        }
+        
+        h6 {
+            font-size: $h6_fs;
+            padding-left: 4rem;
+        }
+
         .h1-wrapper {
             padding: 2rem 1rem;
             padding-bottom: .5rem;
@@ -125,10 +153,6 @@ $p_fs: 16px;
                 border-bottom: 2px solid #333;
                 margin-bottom: 4rem;
             }
-
-            
-
-
     
         }
     
@@ -156,5 +180,6 @@ $p_fs: 16px;
         }
 
     }
+
 }
 

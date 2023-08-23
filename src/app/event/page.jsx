@@ -23,6 +23,7 @@ export default function CreateEvent() {
     category,
     name,
     description,
+    ...data
   } = resData ?? {}
 
   const links = {
@@ -57,9 +58,9 @@ export default function CreateEvent() {
             eventName={name}
             links={links}
             dates={dates}
-            sponsors={[]}
             venue={location}
             category={category.id}
+            {...data}
           />
         </>
       );
