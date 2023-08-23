@@ -27,7 +27,7 @@ $p_fs: 16px;
     
         .title {
             font-size: $title3_fs;
-            line-height: .95;
+            line-height: 1.15;
             margin: 0;
             font-weight: 800;
             text-transform: capitalize;
@@ -73,7 +73,45 @@ $p_fs: 16px;
     .event-body-wrapper {
     
         width: 100%;
-    
+        
+        h1, h2, h3 {
+            font-weight: 700;
+            line-height: 1.15;
+            padding: 1rem;
+        }
+            
+        h4, h5, h6 {
+            font-weight: 600;
+            
+        }
+        h1 {
+                font-size: $h1_fs;
+            }
+
+            h2 {
+                font-size: $h2_fs;
+                padding-left: 2.5rem;
+            }
+            
+            h3 {
+                font-size: $h3_fs;
+                padding-left: 3rem;
+            }
+            
+            h4 {
+                font-size: $h4_fs;
+                padding-left: 3.25rem;
+            }
+            
+            h5 {
+                font-size: $h5_fs;
+                padding-left: 3.6rem;
+            }
+            
+            h6 {
+                font-size: $h6_fs;
+                padding-left: 4rem;
+            }
         .h1-wrapper {
             padding: 2rem 1rem;
             padding-bottom: .5rem;
@@ -87,38 +125,8 @@ $p_fs: 16px;
                 border-bottom: 2px solid #333;
                 margin-bottom: 4rem;
             }
-    
-            h1, h2, h3 {
-                font-weight: 700;
-            }
-            
-            h4, h5, h6 {
-                font-weight: 600;
-            }
 
-            h1 {
-                font-size: $h1_fs;
-            }
-
-            h2 {
-                font-size: $h2_fs;
-            }
             
-            h3 {
-                font-size: $h3_fs;
-            }
-            
-            h4 {
-                font-size: $h4_fs;
-            }
-            
-            h5 {
-                font-size: $h5_fs;
-            }
-            
-            h6 {
-                font-size: $h6_fs;
-            }
 
 
     

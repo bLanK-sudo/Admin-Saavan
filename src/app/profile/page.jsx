@@ -1,8 +1,67 @@
 "use client";
 import { useAuth } from "@/context/AuthContext";
+import { use, useEffect } from "react";
 
 export default function Profile() {
-  const { status } = useAuth();
+  const { status, token } = useAuth();
+  const getTableData = async () => {
+    const response = await fetch(
+      process.env.PUBLIC_URL + "/organizers/event/all_participants/",
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token.access_token}`,
+        },
+      }
+    );
+    const data = await response.json();
+    console.log(data);
+  };
+  useEffect(() => {
+    getTableData();
+  }, [token]);
+  const custom_data = [
+    [
+      {
+        name: "custom",
+        username: "Manish",
+        email: "21f3002911",
+        type: "text",
+        placeholder: "custom",
+        userValue: "custom",
+      },
+    ],
+    [
+      {
+        name: "custom",
+        username: "That guy",
+        email: "21f3002911",
+        type: "text",
+        placeholder: "custom",
+        userValue: "custom",
+      },
+    ],
+    [
+      {
+        name: "custom",
+        username: "This guy",
+        email: "21f3002911",
+        type: "text",
+        placeholder: "custom",
+        userValue: "custom",
+      },
+    ],
+  ];
+
+  const data = [
+    {
+      team: {
+        name: "first",
+      },
+      custom_data: custom_data,
+    },
+  ];
 
   if (status === "loading") {
     return (
@@ -52,6 +111,35 @@ export default function Profile() {
               </div>
             </div>
           </div>
+
+          <table className="overflow-x-scroll">
+            <thead>
+              <tr>
+                <td>S.no</td>
+                <td>Team Name</td>
+                <td>Name</td>
+                <td>Email</td>
+              </tr>
+            </thead>
+            {data.map((team, index) => {
+              return (
+                <tbody key={index}>
+                  {team.custom_data.map((member, i) => {
+                    return member.map((custom, j) => {
+                      return (
+                        <tr key={j}>
+                          <td> {i + 1} </td>
+                          <td> {team.team.name} </td>
+                          <td> {custom.username} </td>
+                          <td> {custom.email} </td>
+                        </tr>
+                      );
+                    });
+                  })}
+                </tbody>
+              );
+            })}
+          </table>
         </main>
       </>
     );
