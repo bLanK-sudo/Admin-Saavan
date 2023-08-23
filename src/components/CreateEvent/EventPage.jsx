@@ -22,6 +22,7 @@ import { categoriesMap } from "@/components/constants";
 import moment from "moment";
 import { useRouter } from "next/navigation";
 import { useEvent } from "@/context/EventContext";
+import jwtDecode from "jwt-decode";
 
 const emptyDummyObj = {
     name: "",
@@ -199,14 +200,13 @@ const InformativeLink = ({ name, value, setName, setValue }) => {
   };
 
   const AdminEventPage = ({auth, description, editEvent, ...props}) => {
-
     const eventDetailsObj = {
       name: props.name ?? "Event Name",
-      category: props.category ?? "",
+      category: props.category?.name.toLowerCase() ?? "",
       eventDate: props.date ?? new Date(),
       registrationStartDate: props.registration_start_date ?? new Date(),
       registrationEndDate: props.registration_end_date ?? new Date(),
-      location: props.venue ?? "",
+      location: props.location ?? "",
       maxParticipants: props.max_participants ?? 0,
       isTeamEvent: props.is_team_event ?? false,
     };
@@ -216,7 +216,7 @@ const InformativeLink = ({ name, value, setName, setValue }) => {
     const router = useRouter();
 
     const extractInfoLinks = (obj) => {
-      if (obj) {
+      if (Object.keys(obj).length !== 0) {
         const links_mapping = {
           meet_link: 'meet',
           fb_link: 'facebook',
@@ -229,7 +229,7 @@ const InformativeLink = ({ name, value, setName, setValue }) => {
   
         const linksArr = []
   
-        Object.keys(links_mapping).forEach((val, ind) => {
+        Object.keys(links_mapping).forEach((val) => {
           if (obj[val] !== '') {
             linksArr.push({name: links_mapping[val], value: obj[val]})
           }
@@ -241,15 +241,17 @@ const InformativeLink = ({ name, value, setName, setValue }) => {
       }
     }
     // Component States
+    const user = jwtDecode(token?.credentials)
     const [value, setValue] = useState(description ?? defaultEditorText);
     const [infol, setInfol] = useState(extractInfoLinks(props) ?? [{ ...emptyDummyObj }]);
     const [sponsors, setSponsor] = useState(props.sponsors ?? [{ ...emptySponsorObj }]);
     const [eventDetails, setEventDetails] = useState({ ...eventDetailsObj });
     const [judges, setJudges] = useState(props.judges ?? [{ ...emptyJudgeObj }]);
-    const [teammates, setTeammates] = useState(props.team ?? [{ ...emptyTeammateObj }]);
+    const [teammates, setTeammates] = useState(props.team?.organizers ?? [{ ...emptyTeammateObj, name: user.name, email: user.email, role: 'Team Lead' }]);
     const [headerImg, setHeaderImg] = useState(props.header_image ?? "");
     const [loading, setLoading] = useState(false);
     const [success, setSuccess] = useState(false);
+
   
     const setDriveLink = (l, s) => {
       const id = l.split("/")[5];
@@ -282,9 +284,9 @@ const InformativeLink = ({ name, value, setName, setValue }) => {
       ).toISOString(),
       date: new Date(eventDetails.eventDate).toISOString(),
       category: categoriesMap[eventDetails.category],
-      team: [...teammates],
-      judges: [...judges],
-      sponsors: [...sponsors],
+      team: teammates,
+      judges: judges,
+      sponsors: sponsors,
       // "mentors": [
       //   {
       //     "name": "",
@@ -359,9 +361,10 @@ const InformativeLink = ({ name, value, setName, setValue }) => {
 
     const submitEditData = (e) => {
       const payload = getPayload();
+
       const accessToken = token.access_token;
       setLoading(true);
-      axios.put(`events/update/${id}`, {...payload}, { headers: { Authorization: `Bearer ${accessToken}` } })
+      axios.put(`events/update/${props.id}/`, {...payload}, { headers: { Authorization: `Bearer ${accessToken}` } })
       .then((res) => {
         setLoading(false);
         setSuccess(true);
@@ -439,27 +442,6 @@ const InformativeLink = ({ name, value, setName, setValue }) => {
       registration_start_date,
       registration_end_date,
     };
-  
-    if (status === "loading") {
-      return (
-        <>
-          <main className="fixed w-screen h-screen inset-0 bg-black bg-opacity-50 flex justify-center items-center">
-            <div className="w-32 h-32 bg-white rounded-full" />
-          </main>
-        </>
-      );
-    }
-  
-    if (status === "unauthenticated") {
-      return (
-        <>
-          <div className="flex flex-col gap-2 justify-center items-center min-h-[70vh]">
-            <h1 className="text-4xl font-bold">Unauthenticated</h1>
-            <p>You are not logged in</p>
-          </div>
-        </>
-      );
-    }
   
     return (
       <>
