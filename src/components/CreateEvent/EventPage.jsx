@@ -339,7 +339,7 @@ const AdminEventPage = ({ auth, description, editEvent, ...props }) => {
         setSuccess(true);
         try {
           const event = await fetch(
-            process.env.PUBLIC_URL + "organizers/event/",
+            process.env.PUBLIC_URL + "/organizers/event/",
             {
               method: "GET",
               headers: {
@@ -407,7 +407,6 @@ const AdminEventPage = ({ auth, description, editEvent, ...props }) => {
         } catch (err) {
           setLoading(false);
           alert("Error getting event");
-          router.push("/");
           console.log(err);
         }
         setTimeout(() => {
