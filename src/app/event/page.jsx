@@ -2,12 +2,12 @@
 
 import EventPageTemplate from "@/components/CreateEvent/EventPageTemplate.jsx";
 import { useEffect, useState } from "react";
-import axios from '@/components/axios'
+import axios from "@/components/axios";
 import { useEvent } from "@/context/EventContext";
 
 export default function CreateEvent() {
-  const {event} = useEvent()
-  const [resData, setResData] = useState(null)
+  const { event } = useEvent();
+  const [resData, setResData] = useState(null);
   const {
     location,
     meet_link,
@@ -24,7 +24,7 @@ export default function CreateEvent() {
     name,
     description,
     ...data
-  } = resData ?? {}
+  } = resData ?? {};
 
   const links = {
     facebook: fb_link,
@@ -34,35 +34,35 @@ export default function CreateEvent() {
     misc: misc_links,
     meet: meet_link,
     youtube: yt_link,
-  }
+  };
   const dates = {
     event_start_date: date,
-    event_end_date: '',
+    event_end_date: "",
     registration_start_date,
     registration_end_date,
-  }
+  };
 
   useEffect(() => {
-    axios.get(`events/${event?.id}`)
-    .then((res) => setResData(res.data))
-    .catch((err) => {
-      if(err.response) console.log(err)
-    })
-  }, [event])
+    if (event) {
+      setResData(event);
+      console.log(event.team.organizers);
+      console.log(Array.isArray(event.team.organizers));
+    }
+  }, [event]);
 
   if (resData) {
-      return (
-        <>
-          <EventPageTemplate
-            data={description}
-            eventName={name}
-            links={links}
-            dates={dates}
-            venue={location}
-            category={category.id}
-            {...data}
-          />
-        </>
-      );
+    return (
+      <>
+        <EventPageTemplate
+          data={description}
+          eventName={name}
+          links={links}
+          dates={dates}
+          venue={location}
+          category={category.id}
+          {...data}
+        />
+      </>
+    );
   }
 }
