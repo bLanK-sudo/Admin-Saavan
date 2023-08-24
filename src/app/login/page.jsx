@@ -4,6 +4,7 @@ import { useAuth } from "@context/AuthContext";
 import { useEvent } from "@context/EventContext";
 import { GoogleLogin } from "@react-oauth/google";
 import { useRouter } from "next/navigation";
+import axios from "@components/axios"
 export default function Login() {
   const { setToken, setStatus } = useAuth();
   const { event, setEvent } = useEvent();
@@ -17,70 +18,60 @@ export default function Login() {
         shape="circle"
         clientId={process.env.GOOGLE_CLIENT_ID}
         redirectUri={process.env.GOOGLE_REDIRECT_URI}
-        onSuccess={async (res) => {
+        onSuccess={(res) => {
           setLoading(true);
-          try {
-            const response = await fetch(
-              process.env.PUBLIC_URL + "auth/convert-token/",
-              {
-                method: "POST",
-                headers: {
-                  "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
-                  backend: "google-identity",
-                  token: res.credential,
-                  grant_type: "convert_token",
-                  client_id: process.env.DJANGO_CLIENT_ID,
-                  client_secret: process.env.GOOGLE_CLIENT_SECRET,
-                }),
-              }
-            );
-            const data = await response.json();
+
+          const authPayload = {
+            backend: "google-identity",
+            token: res.credential,
+            grant_type: "convert_token",
+            client_id: process.env.DJANGO_CLIENT_ID,
+            client_secret: process.env.GOOGLE_CLIENT_SECRET,
+          }
+
+          axios.post('/auth/convert-token', {...authPayload})
+          .then((response) => {
+
             if (response.status === 200) {
+
+              const data = response.data
+
               const token = {
                 access_token: data.access_token,
                 credentials: res.credential,
-                time: new Date().getTime() + 10 * 1000 * 3600,
-              };
-              try {
-                const event = await fetch(
-                  process.env.PUBLIC_URL + "organizers/event/",
-                  {
-                    method: "GET",
-                    headers: {
-                      "Content-Type": "application/json",
-                      Authorization: "Bearer " + token.access_token,
-                    },
-                  }
-                );
-                const event_data = await event.json();
-                if (event.status === 200) {
-                  localStorage.setItem("event", JSON.stringify(event_data));
-                  setEvent(event_data);
-                }
-              } catch (err) {
-                console.log(err);
+                time: (new Date().getTime() + 10 * 1000 * 3600),
               }
 
-              if (data) {
-                localStorage.setItem("token", JSON.stringify(token));
-                setToken(token);
-                setStatus("authenticated");
-              }
-              router.push("/");
-              //setLoading(false);
-            } else if (response.status === 401) {
-              router.push("/unauthorized");
-              //setLoading(false);
+              axios.get('/organizers/event/', {headers: {Authorization: "Bearer " + token.access_token,}})
+              .then((event_res) => {
+                if (event_res.status === 200) {
+                  const event_data = event_res.data
+                  localStorage.setItem("event", JSON.stringify(event_data))
+                  setEvent(event_data);
+
+                  localStorage.setItem("token", JSON.stringify(token));
+                  setToken(token);
+                  setStatus("authenticated");
+                  
+                  router.push("/");
+                }
+
+              })
+              .catch((err) => {
+                if (err.response) router.push("/unauthorized")
+              })
+
             }
-          } catch (err) {
-            // setLoading(false);
-            console.log(err);
-            console.log("Something went wrong");
-          }
+          })
+          .catch((err) => {
+            if (err.response) {
+              console.log(err.response)
+            }
+            // console.log("Something went wrong");
+          })
+
         }}
-        onFailure={(res) => console.log(res)}></GoogleLogin>
+        onFailure={(res) => console.log(res)} />
       {loading && (
         <>
           <div className="w-screen fixed h-screen bg-black bg-opacity-40 inset-0 flex justify-center items-center">
