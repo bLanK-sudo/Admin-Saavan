@@ -339,7 +339,7 @@ const AdminEventPage = ({ auth, description, editEvent, ...props }) => {
         setSuccess(true);
         try {
           const event = await fetch(
-            process.env.PUBLIC_URL + "/organizers/event/",
+            process.env.PUBLIC_URL + "organizers/event/",
             {
               method: "GET",
               headers: {
@@ -378,18 +378,41 @@ const AdminEventPage = ({ auth, description, editEvent, ...props }) => {
 
     const accessToken = token.access_token;
     setLoading(true);
+    console.log("starting");
     axios
       .put(
         `events/update/${props.id}/`,
         { ...payload },
         { headers: { Authorization: `Bearer ${accessToken}` } }
       )
-      .then((res) => {
+      .then(async (res) => {
         setLoading(false);
         setSuccess(true);
-        setInterval(() => {
+        try {
+          const event = await fetch(
+            process.env.PUBLIC_URL + "organizers/event/",
+            {
+              method: "GET",
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: "Bearer " + token.access_token,
+              },
+            }
+          );
+          const event_data = await event.json();
+          if (event.status === 200) {
+            localStorage.setItem("event", JSON.stringify(event_data));
+            setEvent(event_data);
+          }
+        } catch (err) {
+          setLoading(false);
+          alert("Error getting event");
           router.push("/");
-        });
+          console.log(err);
+        }
+        setTimeout(() => {
+          router.push("/");
+        }, 3000);
       })
       .catch((err) => {
         if (err.response) {

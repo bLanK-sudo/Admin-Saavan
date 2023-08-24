@@ -30,7 +30,7 @@ export default function User() {
       try {
         console.log("sending fetch");
         const response = await fetch(
-          process.env.PUBLIC_URL + "/events/set-template/" + event.id + "/",
+          process.env.PUBLIC_URL + "events/set-template/" + event.id + "/",
           {
             method: "PUT",
             headers: {

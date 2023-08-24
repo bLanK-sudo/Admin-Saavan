@@ -6,7 +6,7 @@ export default function Profile() {
   const { status, token } = useAuth();
   const getTableData = async () => {
     const response = await fetch(
-      process.env.PUBLIC_URL + "/organizers/event/all_participants/",
+      process.env.PUBLIC_URL + "organizers/event/all_participants/",
       {
         method: "GET",
         headers: {

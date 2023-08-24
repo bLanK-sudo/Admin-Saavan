@@ -21,7 +21,7 @@ export default function Login() {
           setLoading(true);
           try {
             const response = await fetch(
-              process.env.PUBLIC_URL + "/auth/convert-token/",
+              process.env.PUBLIC_URL + "auth/convert-token/",
               {
                 method: "POST",
                 headers: {
@@ -45,7 +45,7 @@ export default function Login() {
               };
               try {
                 const event = await fetch(
-                  process.env.PUBLIC_URL + "/organizers/event/",
+                  process.env.PUBLIC_URL + "organizers/event/",
                   {
                     method: "GET",
                     headers: {
