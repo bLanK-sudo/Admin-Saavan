@@ -3,10 +3,11 @@
 import EventPageTemplate from "@/components/CreateEvent/EventPageTemplate.jsx";
 import { useEffect, useState } from "react";
 import axios from "@/components/axios";
-import { useEvent } from "@/context/EventContext";
+import { useAuth } from "@/context/AuthContext";
+import Loader from "@/components/Loader";
 
 export default function CreateEvent() {
-  const { event } = useEvent();
+  const {token} = useAuth()
   const [resData, setResData] = useState(null);
   const {
     location,
@@ -43,12 +44,12 @@ export default function CreateEvent() {
   };
 
   useEffect(() => {
-    if (event) {
-      setResData(event);
-      console.log(event.team.organizers);
-      console.log(Array.isArray(event.team.organizers));
-    }
-  }, [event]);
+    token && axios.get(`organizers/event/`, {headers: {Authorization: `Bearer ${token?.access_token}`}})
+    .then((res) => (setResData(res.data)))
+    .catch((err) => {
+      // if(err.response) window.alert(err.response.data.message)
+    })
+  }, [token])
 
   if (resData) {
     return (
@@ -64,5 +65,9 @@ export default function CreateEvent() {
         />
       </>
     );
+  } else {
+    return (
+      <Loader />
+    )
   }
 }
