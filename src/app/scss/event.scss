@@ -9,6 +9,24 @@ $h4_fs: 31.25px;
 $h5_fs: 25px;
 $h6_fs: 20px;
 $p_fs: 16px;
+
+$title1_fs_sm: 46.18px;
+$title2_fs_sm: 41.05px;
+$title3_fs_sm: 36.49px;
+
+$h1_fs_sm: 32.44px;
+$h2_fs_sm: 28.83px;
+$h3_fs_sm: 25.63px;
+$h4_fs_sm: 22.78px;
+$h5_fs_sm: 20.25px;
+$h6_fs_sm: 18px;
+
+
+@mixin responsive_heading($font) {
+    @media only screen and (max-width: 500px) {
+        font-size: $font;
+    }
+}
 // $c1:#143F6B;
 // $c2: #F55353;
 // $c3: #FEB139;
@@ -27,6 +45,7 @@ $p_fs: 16px;
     
         .title {
             font-size: $title3_fs;
+            @include responsive_heading($title3_fs_sm);
             line-height: 1.15;
             margin: 0;
             font-weight: 800;
@@ -113,31 +132,37 @@ $p_fs: 16px;
 
         h1 {
             font-size: $h1_fs;
+            @include responsive_heading($h1_fs_sm);
         }
 
         h2 {
             font-size: $h2_fs;
             padding-left: 2.5rem;
+            @include responsive_heading($h2_fs_sm);
         }
         
         h3 {
             font-size: $h3_fs;
             padding-left: 3rem;
+            @include responsive_heading($h3_fs_sm);
         }
         
         h4 {
             font-size: $h4_fs;
             padding-left: 3.25rem;
+            @include responsive_heading($h4_fs_sm);
         }
         
         h5 {
             font-size: $h5_fs;
             padding-left: 3.6rem;
+            @include responsive_heading($h5_fs_sm);
         }
         
         h6 {
             font-size: $h6_fs;
             padding-left: 4rem;
+            @include responsive_heading($h6_fs_sm);
         }
 
         .h1-wrapper {
