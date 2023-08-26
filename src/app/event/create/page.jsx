@@ -1,18 +1,15 @@
 "use client";
 
 import { AdminEventPage } from "@/components/CreateEvent/EventPage"
+import Loader from "@/components/Loader";
 import { useAuth } from "@/context/AuthContext";
 
 const AdminCreateEventPage = () => {
   const { token, status } = useAuth();
   if (status === "loading") {
     return (
-      <>
-        <main className="fixed w-screen h-screen inset-0 bg-black bg-opacity-50 flex justify-center items-center">
-          <div className="w-32 h-32 bg-white rounded-full" />
-        </main>
-      </>
-    );
+      <Loader />
+    )
   }
 
   if (status === "unauthenticated") {

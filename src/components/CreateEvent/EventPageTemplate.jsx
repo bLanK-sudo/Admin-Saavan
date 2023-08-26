@@ -12,13 +12,13 @@ export default function EventPageTemplate({
   return (
     <div className="event-page-wrapper">
       <Title
+        {...props}
         title={eventName}
         dates={dates}
         links={links}
         venue={location}
         registration_link={registration_link}
         team={Array.isArray(team) ? team : team.organizers}
-        {...props}
       />
       <CustomMDX source={data} />
     </div>
