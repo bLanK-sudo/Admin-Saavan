@@ -4,7 +4,7 @@ import { useAuth } from "@context/AuthContext";
 import { useEvent } from "@context/EventContext";
 import { GoogleLogin } from "@react-oauth/google";
 import { useRouter } from "next/navigation";
-import axios from "@components/axios"
+import axios from "@components/axios";
 export default function Login() {
   const { setToken, setStatus } = useAuth();
   const { event, setEvent } = useEvent();
@@ -27,51 +27,51 @@ export default function Login() {
             grant_type: "convert_token",
             client_id: process.env.DJANGO_CLIENT_ID,
             client_secret: process.env.GOOGLE_CLIENT_SECRET,
-          }
+          };
 
-          axios.post('/auth/convert-token', {...authPayload})
-          .then((response) => {
+          axios
+            .post("/auth/convert-token", { ...authPayload })
+            .then((response) => {
+              if (response.status === 200) {
+                const data = response.data;
 
-            if (response.status === 200) {
+                const token = {
+                  access_token: data.access_token,
+                  credentials: res.credential,
+                  time: new Date().getTime() + 10 * 1000 * 3600,
+                };
 
-              const data = response.data
+                axios
+                  .get("/organizers/event/", {
+                    headers: { Authorization: "Bearer " + token.access_token },
+                  })
+                  .then((event_res) => {
+                    if (event_res.status === 200) {
+                      const event_data = event_res.data;
+                      localStorage.setItem("event", JSON.stringify(event_data));
+                      setEvent(event_data);
 
-              const token = {
-                access_token: data.access_token,
-                credentials: res.credential,
-                time: (new Date().getTime() + 10 * 1000 * 3600),
+                      localStorage.setItem("token", JSON.stringify(token));
+                      setToken(token);
+                      setStatus("authenticated");
+
+                      router.push("/");
+                    }
+                  })
+                  .catch((err) => {
+                    if (err.response) router.push("/eventhead");
+                  });
               }
-
-              axios.get('/organizers/event/', {headers: {Authorization: "Bearer " + token.access_token,}})
-              .then((event_res) => {
-                if (event_res.status === 200) {
-                  const event_data = event_res.data
-                  localStorage.setItem("event", JSON.stringify(event_data))
-                  setEvent(event_data);
-
-                  localStorage.setItem("token", JSON.stringify(token));
-                  setToken(token);
-                  setStatus("authenticated");
-                  
-                  router.push("/");
-                }
-
-              })
-              .catch((err) => {
-                if (err.response) router.push("/unauthorized")
-              })
-
-            }
-          })
-          .catch((err) => {
-            if (err.response) {
-              console.log(err.response)
-            }
-            // console.log("Something went wrong");
-          })
-
+            })
+            .catch((err) => {
+              if (err.response) {
+                console.log(err.response);
+              }
+              // console.log("Something went wrong");
+            });
         }}
-        onFailure={(res) => console.log(res)} />
+        onFailure={(res) => console.log(res)}
+      />
       {loading && (
         <>
           <div className="w-screen fixed h-screen bg-black bg-opacity-40 inset-0 flex justify-center items-center">
