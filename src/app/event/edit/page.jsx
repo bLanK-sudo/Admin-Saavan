@@ -9,7 +9,7 @@ import { useEffect, useState } from "react";
 const AdminEditEventPage = () => {
   const { token, status } = useAuth();
   const [data, setData] = useState(null);
-  const [flag, setFlag] = useState(false);
+  const [flag, setFlag] = useState(true);
   useEffect(() => {
     token &&
       axios

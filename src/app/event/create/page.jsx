@@ -7,7 +7,7 @@ import { useState } from "react";
 
 const AdminCreateEventPage = () => {
   const { token, status } = useAuth();
-  const [flag, setFlag] = useState(false);
+  const [flag, setFlag] = useState(true);
   if (status === "loading") {
     return <Loader />;
   }
