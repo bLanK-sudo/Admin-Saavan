@@ -11,7 +11,7 @@ import Link from "next/link";
 export default function Compose() {
   const [checkedUser, setCheckedUser] = useState(false);
   const [checkedTeam, setCheckedTeam] = useState(false);
-  const [flag, setFlag] = useState(false);
+  const [flag, setFlag] = useState(true);
   const { status } = useAuth();
   const { event } = useEvent();
   if (status === "loading") {
