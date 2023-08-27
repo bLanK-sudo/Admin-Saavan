@@ -63,7 +63,7 @@ export default function Home() {
             <p className="text-sm">{user.email}</p>
           </div>
         </div>
-        <div className="flex gap-4 justify-center items-center">
+        {/* <div className="flex flex-col md:flex-row gap-4 justify-center items-center">
           {event ? (
             <>
               <Link
@@ -93,6 +93,9 @@ export default function Home() {
               </Link>
             </>
           )}
+        </div> */}
+        <div className="flex gap-4 justify-center items-center">
+          <p>Can't edit your event page!!</p>
         </div>
       </main>
     );

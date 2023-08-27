@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import User from "@/components/CreateEvent/User";
 import Team from "@/components/CreateEvent/Team";
 import { motion, AnimatePresence } from "framer-motion";
@@ -11,6 +11,7 @@ import Link from "next/link";
 export default function Compose() {
   const [checkedUser, setCheckedUser] = useState(false);
   const [checkedTeam, setCheckedTeam] = useState(false);
+  const [flag, setFlag] = useState(false);
   const { status } = useAuth();
   const { event } = useEvent();
   if (status === "loading") {
@@ -22,7 +23,7 @@ export default function Compose() {
       </>
     );
   }
-  if (status === "unauthenticated") {
+  if (status === "unauthenticated" || flag) {
     return (
       <>
         <div className="flex flex-col gap-2 justify-center items-center min-h-[70vh]">

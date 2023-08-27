@@ -1,15 +1,15 @@
 "use client";
 
-import { AdminEventPage } from "@/components/CreateEvent/EventPage"
+import { AdminEventPage } from "@/components/CreateEvent/EventPage";
 import Loader from "@/components/Loader";
 import { useAuth } from "@/context/AuthContext";
+import { useState } from "react";
 
 const AdminCreateEventPage = () => {
   const { token, status } = useAuth();
+  const [flag, setFlag] = useState(false);
   if (status === "loading") {
-    return (
-      <Loader />
-    )
+    return <Loader />;
   }
 
   if (status === "unauthenticated") {
@@ -22,10 +22,10 @@ const AdminCreateEventPage = () => {
       </>
     );
   }
-  
-  return (
-    <AdminEventPage auth={{token, status}} />
-  )
-}
 
-export default AdminCreateEventPage
+  if (flag) {
+    return <AdminEventPage auth={{ token, status }} />;
+  }
+};
+
+export default AdminCreateEventPage;
