@@ -40,7 +40,11 @@ export default function Login() {
                   credentials: res.credential,
                   time: new Date().getTime() + 10 * 1000 * 3600,
                 };
+                localStorage.setItem("token", JSON.stringify(token));
+                setToken(token);
+                setStatus("authenticated");
 
+                router.push("/");
                 axios
                   .get("/organizers/event/", {
                     headers: { Authorization: "Bearer " + token.access_token },
@@ -51,11 +55,6 @@ export default function Login() {
                       localStorage.setItem("event", JSON.stringify(event_data));
                       setEvent(event_data);
                     }
-                    localStorage.setItem("token", JSON.stringify(token));
-                    setToken(token);
-                    setStatus("authenticated");
-
-                    router.push("/");
                   })
                   .catch((err) => {
                     if (err.response) console.log(err);
