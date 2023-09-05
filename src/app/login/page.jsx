@@ -59,7 +59,7 @@ export default function Login() {
                     }
                   })
                   .catch((err) => {
-                    if (err.response) router.push("/eventhead");
+                    if (err.response) console.log(err);
                   });
               }
             })
