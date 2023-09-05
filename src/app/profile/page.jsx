@@ -2,12 +2,60 @@
 import { useAuth } from "@/context/AuthContext";
 import { useEvent } from "@/context/EventContext";
 import { useState, useEffect, useRef } from "react";
+import jwt_decode from "jwt-decode";
 
 export default function Profile() {
   const { status, token } = useAuth();
   const [data, setData] = useState(null);
+  const [user, setUser] = useState(null);
+  const [soloData, setSoloData] = useState(null);
+  const [teamData, setTeamData] = useState(null);
+  const [coreData, setCoreData] = useState(null);
+  const [soloTeamName, setSoloTeamName] = useState(null);
+  const [teamName, setTeamName] = useState(null);
   const { event } = useEvent();
   const table = useRef(null);
+
+  const getCoreData = async () => {
+    if (token) {
+      const response = await fetch(
+        process.env.PUBLIC_URL + "organizers/core/all_participants/",
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token.access_token}`,
+          },
+        }
+      );
+      const res = await response.json();
+      console.log(res);
+      if (response.status === 200) setCoreData(res);
+    }
+  };
+
+  const getTd = (dt) => {
+    let correct = [];
+    dt.options.map((option) => {
+      if (dt.userOptions[option] == true) {
+        correct.push(option);
+      }
+    });
+    return correct;
+  };
+
+  useEffect(() => {
+    let cred;
+    if (token && status === "authenticated") {
+      cred = jwt_decode(token.credentials);
+      if (cores.includes(cred.email)) {
+        setUser(cred);
+        getCoreData();
+      } else {
+        setUser(null);
+      }
+    }
+  }, [token]);
   const getTableData = async () => {
     if (token) {
       const response = await fetch(
@@ -25,6 +73,13 @@ export default function Profile() {
       if (response.status === 200) setData(res);
     }
   };
+
+  const cores = [
+    "culturals@iitmparadox.org",
+    "technicals@iitmparadox.org",
+    "sports@iitmparadox.org",
+  ];
+
   class csvExportFromTable {
     constructor(table, header = true) {
       this.table = table;
@@ -83,6 +138,25 @@ export default function Profile() {
       URL.revokeObjectURL(url);
     }, 500);
   };
+  const CSVEventCoreDownload = (id, data, name) => {
+    if (data.length === 0) {
+      alert("No data to download");
+      return;
+    }
+    const tableData = new csvExportFromTable(
+      document.querySelector("#table" + id)
+    );
+    const csvData = tableData.exportCsvFromTable();
+    const csvBlob = new Blob([csvData], { type: "text/csv" });
+    const url = URL.createObjectURL(csvBlob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = name + ".csv";
+    a.click();
+    setTimeout(() => {
+      URL.revokeObjectURL(url);
+    }, 500);
+  };
   useEffect(() => {
     getTableData();
   }, [token]);
@@ -90,6 +164,30 @@ export default function Profile() {
   useEffect(() => {
     console.log(event);
   }, [event]);
+
+  useEffect(() => {
+    if (coreData) {
+      let customTeamData = {};
+      coreData.team_applications.map((application, index) => {
+        customTeamData.hasOwnProperty(application.event.name)
+          ? customTeamData[application.event.name].push(application)
+          : (customTeamData[application.event.name] = [application]);
+      });
+      let customSoloData = {};
+      coreData.solo_applications.map((application, index) => {
+        customSoloData.hasOwnProperty(application.event.name)
+          ? customSoloData[application.event.name].push(application)
+          : (customSoloData[application.event.name] = [application]);
+      });
+      setTeamData(customTeamData);
+      setSoloData(customSoloData);
+    }
+    console.log("solo, team", soloData, teamData);
+  }, [coreData]);
+
+  useEffect(() => {
+    console.log("teamName", teamName);
+  }, []);
 
   if (status === "loading") {
     return (
@@ -107,6 +205,191 @@ export default function Profile() {
           <h1 className="text-4xl font-bold">Unauthenticated</h1>
           <p>You are not logged in</p>
         </div>
+      </>
+    );
+  }
+  if (user) {
+    return (
+      <>
+        {teamData &&
+          Object.keys(teamData).map((team, index) => {
+            return (
+              <div key={index} className="p-4">
+                <div className="flex justify-between items-center p-4">
+                  <h1 className="font-bold text-2xl">
+                    {teamData[team][0].event.name}
+                  </h1>
+                  <button
+                    onClick={() =>
+                      CSVEventCoreDownload(
+                        index,
+                        Object.keys(teamData),
+                        teamData[team][0].event.name
+                      )
+                    }
+                    className="p-4 rounded-xl bg-accent text-white">
+                    Download Data
+                  </button>
+                </div>
+                <div className="w-full overflow-x-scroll">
+                  <table
+                    id={"table" + index}
+                    className="border-collapse border border-slate-500 table-fixed p-4">
+                    <thead>
+                      <tr className="even:bg-slate-600 even:text-white odd:bg-gray-300 ">
+                        <td className="border border-black p-4">S.No</td>
+                        <td className="border border-black p-4">Team Name</td>
+                        <td className="border border-black p-4">Email</td>
+                        <td className="border border-black p-4">Name</td>
+                        {teamData[team].map((application, j) => {
+                          return application.custom_data.map((dt, jk) => {
+                            if (j == 0 && jk == 0) {
+                              return dt.map((cd, k) => {
+                                return (
+                                  <td
+                                    key={k}
+                                    className="border border-black p-4 max-w-[200px] overflow-hidden">
+                                    {cd.name}
+                                  </td>
+                                );
+                              });
+                            }
+                          });
+                        })}
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {teamData[team].map((application, j) => {
+                        return application.custom_data.map((dt, jk) => {
+                          return (
+                            application.team.members[jk] && (
+                              <tr key={jk}>
+                                <td className="border border-black p-4 max-w-[200px] overflow-hidden">
+                                  {j + 1}
+                                </td>
+                                <td className="border border-black p-4 max-w-[200px] overflow-hidden">
+                                  {" "}
+                                  {application.team.name}{" "}
+                                </td>
+                                <td className="border border-black p-4 max-w-[300px] overflow-hidden">
+                                  {" "}
+                                  {application.team.members[jk].user.email}{" "}
+                                </td>
+                                <td className="border border-black p-4 max-w-[200px] overflow-hidden">
+                                  {" "}
+                                  {application.team.members[jk].user
+                                    .first_name +
+                                    " " +
+                                    application.team.members[jk].user
+                                      .last_name}{" "}
+                                </td>
+                                {dt.map((cd, k) => {
+                                  return (
+                                    <td
+                                      key={k}
+                                      className="border border-black p-4 max-w-[200px] overflow-hidden">
+                                      {cd.userValue}
+                                    </td>
+                                  );
+                                })}
+                              </tr>
+                            )
+                          );
+                        });
+                      })}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            );
+          })}
+        {soloData &&
+          Object.keys(soloData).map((event, index) => {
+            console.log(soloData[event]);
+            return (
+              <div key={index} className="p-4">
+                <div className="flex justify-between items-center p-4">
+                  <h1 className="font-bold text-2xl">
+                    {soloData[event][0].event.name}
+                  </h1>
+                  <button
+                    onClick={() =>
+                      CSVEventCoreDownload(
+                        index + Object.keys(teamData).length,
+                        Object.keys(soloData),
+                        soloData[event][0].event.name
+                      )
+                    }
+                    className="p-4 rounded-xl bg-accent text-white">
+                    Download Data
+                  </button>
+                </div>
+                <div className="w-full overflow-x-scroll">
+                  <table
+                    id={"table" + (index + Object.keys(teamData).length)}
+                    className="border-collapse border border-slate-500 table-fixed">
+                    <thead>
+                      <tr className="even:bg-slate-600 even:text-white odd:bg-gray-300 ">
+                        <td className="border border-black p-4 overflow-hidden">
+                          S.No
+                        </td>
+                        <td className="border border-black p-4 overflow-hidden">
+                          Email
+                        </td>
+                        <td className="border border-black p-4 overflow-hidden">
+                          Name
+                        </td>
+                        {soloData[event].map((application, j) => {
+                          return application.custom_data.map((dt, jk) => {
+                            if (j == 0) {
+                              return (
+                                <td className="border border-black p-4 max-w-[200px] overflow-hidden">
+                                  {" "}
+                                  {dt.name}{" "}
+                                </td>
+                              );
+                            }
+                          });
+                        })}
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {soloData[event].map((application, j) => {
+                        return (
+                          <tr>
+                            <td className="border border-black p-4 max-w-[200px] overflow-hidden">
+                              {j + 1}
+                            </td>
+                            <td className="border border-black p-4 max-w-[200px] overflow-hidden">
+                              {application.student.user.email}
+                            </td>
+                            <td className="border border-black p-4 max-w-[200px] overflow-hidden">
+                              {application.student.user.first_name +
+                                application.student.user.last_name}
+                            </td>
+                            {application.custom_data.map((dt, jk) => {
+                              return dt.type == "checkbox" ||
+                                dt.type == "radio" ? (
+                                <td className="border border-black p-4 max-w-[200px] overflow-hidden">
+                                  {getTd(dt)}
+                                </td>
+                              ) : (
+                                <td
+                                  key={jk}
+                                  className="border border-black p-4 max-w-[200px] overflow-hidden">
+                                  {dt.userValue}
+                                </td>
+                              );
+                            })}
+                          </tr>
+                        );
+                      })}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            );
+          })}
       </>
     );
   } else
@@ -218,65 +501,6 @@ export default function Profile() {
           ) : (
             <>Loading....</>
           )}
-
-          {/* <table className="overflow-x-scroll">
-            <thead>
-              <tr>
-                <td>S.no</td>
-                <td>Name</td>
-                <td>Email</td>
-                {data &&
-                  data.map((dt, index) => {
-                    return dt.custom_data.map((cd, i) => {
-                      return <td> {cd.name} </td>;
-                    });
-                  })}
-              </tr>
-            </thead>
-            {data &&
-              data.map((dt, index) => {
-                return (
-                  <tbody key={index}>
-                    <tr>
-                      <td>{index + 1}</td>
-                      <td>Manish S</td>
-                      <td>21f3002911</td>{" "}
-                      {dt.custom_data.map((cd, i) => {
-                        if (cd.userValue) {
-                          return <td>{cd.userValue} </td>;
-                        } else if (cd.userOptions) {
-                          <td>
-                            {cd.options.map((op, j) => {
-                              let arr = [];
-                              if (cd.userOptions[op]) arr.push(op);
-                              return arr;
-                            })}
-                          </td>;
-                        }
-                      })}
-                    </tr>
-                  </tbody>
-                );
-              })}
-            {data && data.custom_data.map((team, index) => {
-              return (
-                <tbody key={index}>
-                  {team.custom_data.map((member, i) => {
-                    return member.map((custom, j) => {
-                      return (
-                        <tr key={j}>
-                          <td> {i + 1} </td>
-                          <td> {team.team.name} </td>
-                          <td> {custom.username} </td>
-                          <td> {custom.email} </td>
-                        </tr>
-                      );
-                    });
-                  })}
-                </tbody>
-              );
-            })}
-          </table> */}
         </main>
       </>
     );
