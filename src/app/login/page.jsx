@@ -50,13 +50,12 @@ export default function Login() {
                       const event_data = event_res.data;
                       localStorage.setItem("event", JSON.stringify(event_data));
                       setEvent(event_data);
-
-                      localStorage.setItem("token", JSON.stringify(token));
-                      setToken(token);
-                      setStatus("authenticated");
-
-                      router.push("/");
                     }
+                    localStorage.setItem("token", JSON.stringify(token));
+                    setToken(token);
+                    setStatus("authenticated");
+
+                    router.push("/");
                   })
                   .catch((err) => {
                     if (err.response) console.log(err);
