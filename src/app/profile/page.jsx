@@ -78,6 +78,8 @@ export default function Profile() {
     "culturals@iitmparadox.org",
     "technicals@iitmparadox.org",
     "sports@iitmparadox.org",
+    "manishsuresh993@gmail.com",
+    "21f3002911@ds.study.iitm.ac.in",
   ];
 
   class csvExportFromTable {
