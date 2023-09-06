@@ -5,6 +5,7 @@ import { useEvent } from "@context/EventContext";
 import { GoogleLogin } from "@react-oauth/google";
 import { useRouter } from "next/navigation";
 import axios from "@components/axios";
+import Loader from "@/components/Loader";
 export default function Login() {
   const { setToken, setStatus } = useAuth();
   const { event, setEvent } = useEvent();
@@ -72,11 +73,7 @@ export default function Login() {
       />
       {loading && (
         <>
-          <div className="w-screen fixed h-screen bg-black bg-opacity-40 inset-0 flex justify-center items-center">
-            <h1 className="p-4 bg-secondary text-secondary-content rounded-xl w-[80%] md:w-1/2 text-center h-[20%] md:h-1/3 flex justify-center items-center">
-              Please wait a few secs while we log you in...
-            </h1>
-          </div>
+          <Loader />
         </>
       )}
     </main>

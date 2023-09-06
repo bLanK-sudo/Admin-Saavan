@@ -4,10 +4,57 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 import jwt_decode from "jwt-decode";
 import Link from "next/link";
+import { useEvent } from "@/context/EventContext";
 export default function Home() {
   const { token, status } = useAuth();
   const [user, setUser] = useState(null);
-  const [event, setEvent] = useState(null);
+  const { event, setEvent } = useEvent();
+  const [loading, setLoading] = useState(false);
+  useEffect(() => {
+    console.log(event);
+  }, [event]);
+  const changeReg = async (open, id) => {
+    setLoading(true);
+    if (open) {
+      const response = await fetch(
+        process.env.PUBLIC_URL + "events/close/" + id + "/",
+        {
+          method: "PUT",
+          headers: {
+            Authorization: "Bearer " + token.access_token,
+          },
+        }
+      );
+      const data = await response.json();
+      console.log(data);
+      if (response.ok) {
+        setEvent({ ...event, open: false });
+        localStorage.setItem(
+          "event",
+          JSON.stringify({ ...event, open: false })
+        );
+      }
+      setLoading(false);
+    } else {
+      const response = await fetch(
+        process.env.PUBLIC_URL + "events/open/" + id + "/",
+        {
+          method: "PUT",
+          headers: {
+            Authorization: "Bearer " + token.access_token,
+          },
+        }
+      );
+      const data = await response.json();
+      console.log(data);
+      if (response.ok) {
+        setEvent({ ...event, open: true });
+        localStorage.setItem("event", JSON.stringify({ ...event, open: true }));
+      }
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
     if (!token) {
       setUser(null);
@@ -20,11 +67,6 @@ export default function Home() {
       setUser(cred);
     }
   }, [token]);
-  useEffect(() => {
-    if (typeof window !== "undefined" && !event) {
-      setEvent(JSON.parse(localStorage.getItem("event")));
-    }
-  });
 
   if (status === "loading") {
     return (
@@ -95,12 +137,25 @@ export default function Home() {
           )}
         </div> */}
         {event && (
-          <div className="flex gap-4 justify-center items-center">
+          <div className="flex flex-col md:flex-row gap-4 justify-center items-center">
             <Link
               href="/event/edit"
               className="p-2 px-4 rounded-xl border-2 border-accent hover:bg-accent hover:text-accent-content transition-all duration-300 font-bold">
               Edit event page
             </Link>
+            <button
+              className="p-2 px-4 rounded-xl border-2 border-accent hover:bg-accent hover:text-accent-content transition-all duration-300 font-bold"
+              onClick={() => changeReg(event.open, event.id)}>
+              {event.open && event.open ? "Close" : "Open"} Registrations
+            </button>
+          </div>
+        )}
+
+        {loading && (
+          <div className="fixed w-screen h-screen inset-0 bg-black bg-opacity-50 flex justify-center items-center">
+            <div className="w-32 h-32 rounded-full">
+              <img src="/logo.jpg" alt="Logo" className="rounded-full" />
+            </div>
           </div>
         )}
       </main>
