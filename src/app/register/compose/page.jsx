@@ -1,19 +1,32 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import User from "@/components/CreateEvent/User";
 import Team from "@/components/CreateEvent/Team";
 import { motion, AnimatePresence } from "framer-motion";
 import { useAuth } from "@/context/AuthContext";
 import { useEvent } from "@/context/EventContext";
-import Link from "next/link";
+import jwt_decode from "jwt-decode";
 
 export default function Compose() {
   const [checkedUser, setCheckedUser] = useState(false);
   const [checkedTeam, setCheckedTeam] = useState(false);
-  const [flag, setFlag] = useState(false);
-  const { status } = useAuth();
+  const [flag, setFlag] = useState(true);
+  const { token, status } = useAuth();
   const { event } = useEvent();
+  const allowed = ["21f1001429@ds.study.iitm.ac.in"];
+  useEffect(() => {
+    let cred;
+    if (token && status === "authenticated") {
+      cred = jwt_decode(token.credentials);
+      if (allowed.includes(cred.email)) {
+        setFlag(false);
+      }
+    }
+  }, [token]);
+  useEffect(() => {
+    console.log(event);
+  }, [event]);
   if (status === "loading") {
     return (
       <>
